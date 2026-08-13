@@ -1,0 +1,21 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}Inventorio{{end}}</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="layout">
+        {{block "sidebar" .}}{{end}}
+
+        <main class="main">
+            {{block "content" .}}{{end}}
+        </main>
+    </div>
+</body>
+</html>
+{{end}}

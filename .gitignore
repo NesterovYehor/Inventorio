@@ -1,0 +1,40 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+Inventorio
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories (uncomment if you vendor dependencies)
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Environment variables
+.env
+.env.*
+
+# Temporary files (e.g. air live-reload output)
+tmp/
+tmp/**
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo

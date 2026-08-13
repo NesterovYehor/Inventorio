@@ -1,0 +1,46 @@
+{{define "title"}}Properties — Inventorio{{end}}
+
+{{define "content"}}
+<header class="page-header">
+  <h1>Properties Needs Definition</h1>
+  <div class="page-header__actions">
+    <button class="btn btn--secondary" type="button" disabled>Confirm Changes</button>
+    <button class="btn btn--icon" type="button" aria-label="Refresh">&#x21BB;</button>
+  </div>
+</header>
+
+<table class="needs-table">
+  <thead>
+    <tr>
+      <th scope="col">Property Name <span class="sort">&uarr;</span></th>
+      <th scope="col">Big Towels <span class="sort">&#8693;</span></th>
+      <th scope="col">Small Towels <span class="sort">&#8693;</span></th>
+      <th scope="col">Pillows <span class="sort">&#8693;</span></th>
+      <th scope="col">Bed Sheets <span class="sort">&#8693;</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">CARRIÓ</th>
+      <td><input type="number" name="big_towels" value="6" min="0"></td>
+      <td><input type="number" name="small_towels" value="4" min="0"></td>
+      <td><input type="number" name="pillows" value="3" min="0"></td>
+      <td><input type="number" name="bed_sheets" value="3" min="0"></td>
+    </tr>
+    <tr>
+      <th scope="row">Apt 101</th>
+      <td><input type="number" name="big_towels" value="6" min="0"></td>
+      <td><input type="number" name="small_towels" value="4" min="0"></td>
+      <td><input type="number" name="pillows" value="3" min="0"></td>
+      <td><input type="number" name="bed_sheets" value="3" min="0"></td>
+    </tr>
+    <tr>
+      <th scope="row">Apt 102</th>
+      <td><input type="number" name="big_towels" value="6" min="0"></td>
+      <td><input type="number" name="small_towels" value="4" min="0"></td>
+      <td><input type="number" name="pillows" value="4" min="0"></td>
+      <td><input type="number" name="bed_sheets" value="3" min="0"></td>
+    </tr>
+  </tbody>
+</table>
+{{end}}
