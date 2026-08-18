@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	app, err := app.Setup("tmp/tmp.db", ":8080")
+	app, err := app.Setup("tmp/tmp.db", ":3000")
 	if err != nil {
 		log.Println(err)
 		return

@@ -1,0 +1,57 @@
+{{define "property-header-row"}}
+<tr>
+  <th scope="col">Property Name <span class="sort">&uarr;</span></th>
+  {{range .Names}}
+  <th scope="col">{{.Name}} <span class="sort">&#8693;</span></th>
+  {{end}}
+</tr>
+{{end}}
+
+{{define "property-row"}}
+<tr id="property-row-{{.Property.ID}}">
+  <!-- Property Name Cell with Autosave -->
+  <th scope="row">
+    <input type="text" name="name" value="{{.Property.Name}}" hx-patch="/properties/{{.Property.ID}}"
+      hx-trigger="change delay:500ms" hx-swap="none">
+  </th>
+
+  <!-- Dynamic Item Cells -->
+  {{range .PropertyNeed}}
+  <td>
+    <input type="number" name="quantity" value="{{.Quantity}}" min="0"
+      hx-patch="/properties/{{$.Property.ID}}/items/{{.ItemID}}" hx-trigger="change delay:500ms"  hx-swap="none">
+  </td>
+  {{end}}
+</tr>
+{{end}}
+
+{{define "item-row"}}
+<tr id="item-row-{{.ID}}" style="view-transition-name: item-row-{{.ID}}">
+  <!-- Item Name Cell with Autosave -->
+  <th scope="row">
+    <input type="text" name="name" value="{{.Name}}" hx-patch="/items/{{.ID}}" hx-trigger="change delay:500ms"
+      hx-swap="none">
+  </th>
+
+  <!-- Quantity Cell with Autosave -->
+  <td>
+    <input type="number" name="quantity" value="{{.Quantity}}" min="0" hx-patch="/items/{{.ID}}"
+      hx-trigger="change delay:500ms" hx-swap="none">
+  </td>
+
+  <!-- Delete Action -->
+  <td class="row-actions">
+    <button class="btn btn--icon btn--delete" type="button" aria-label="Delete item" hx-delete="/items/{{.ID}}"
+      hx-target="#item-row-{{.ID}}" hx-swap="outerHTML swap:300ms transition:true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 6h18" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+      </svg>
+    </button>
+  </td>
+</tr>
+{{end}}

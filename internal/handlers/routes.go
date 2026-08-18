@@ -23,17 +23,19 @@ func New(db *database.DB) *Handler {
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", h.handleIndex)
-	mux.HandleFunc("GET /properties", h.handlerProperties)
+	mux.HandleFunc("GET /properties", h.handleProperties)
+	mux.HandleFunc("POST /properties", h.handleAddProperty)
+	mux.HandleFunc("PATCH /properties/{id}", h.handleUpdatePropertyName)
+	mux.HandleFunc("PATCH /properties/{id}/items/{itemId}", h.handleUpdatePropertyNeed)
+	mux.HandleFunc("GET /items", h.handleItems)
+	mux.HandleFunc("POST /items", h.handleAddItem)
+	mux.HandleFunc("PATCH /items/{id}", h.handleUpdateItem)
+	mux.HandleFunc("DELETE /items/{id}", h.handleDeleteItem)
 	mux.Handle("GET /static/", ui.StaticHandler())
 
 	return mux
 }
 
 func (h *Handler) handleIndex(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/properties", http.StatusSeeOther)
-}
-
-func (h *Handler) handlerProperties(w http.ResponseWriter, r *http.Request) {
-	ui.Render(w, r, "properties", nil)
-
+	http.Redirect(w, r, "/items", http.StatusSeeOther)
 }

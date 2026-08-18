@@ -14,16 +14,24 @@ var staticFS embed.FS
 
 var pageCache = map[string]*template.Template{}
 
-func InitUI() {
-	base := template.Must(template.ParseFS(templatesFS, "templates/base.html", "templates/partials/sidebar.html"))
+var componentCache = map[string]*template.Template{}
 
+func InitUI() {
+	base := template.Must(template.ParseFS(templatesFS, "templates/base.html", "templates/partials/sidebar.html", "templates/partials/row.html"))
+
+	pageCache["base"] = base
 	pageCache["properties"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/properties.html"))
+	pageCache["storage"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/storage.html"))
+
+	componentCache["item-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
+	componentCache["property-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
 }
 
-func Render(w http.ResponseWriter, r *http.Request, pageName string, data any) {
+func RenderContent(w http.ResponseWriter, r *http.Request, pageName string, data any) {
 	tmpl, exist := pageCache[pageName]
 	if !exist {
 		http.Error(w, "Template not found", http.StatusInternalServerError)
+		return
 	}
 
 	if r.Header.Get("HX-Request") == "true" {
@@ -32,9 +40,18 @@ func Render(w http.ResponseWriter, r *http.Request, pageName string, data any) {
 	}
 
 	tmpl.ExecuteTemplate(w, "base", data)
-
 }
 
-func StaticHandler() http.Handler{
+func RenderComponent(w http.ResponseWriter, componentName string, data any) {
+	tmpl, exist := componentCache[componentName]
+	if !exist {
+		http.Error(w, "Component not found", http.StatusInternalServerError)
+		return
+	}
+
+	tmpl.ExecuteTemplate(w, componentName, data)
+}
+
+func StaticHandler() http.Handler {
 	return http.FileServer(http.FS(staticFS))
 }

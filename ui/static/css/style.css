@@ -3,198 +3,239 @@
 ============================================================ */
 
 /* ---------- Reset ---------- */
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #1c1e21;
-    background: #ffffff;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1c1e21;
+  background: #ffffff;
 }
 
 /* ---------- Layout: sidebar + main ---------- */
 .layout {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 
 .main {
-    flex: 1;
-    min-width: 0;
-    padding: 24px 32px; /* gap before sidebar and right margin */
+  flex: 1;
+  min-width: 0;
+  padding: 24px 32px;
+  /* gap before sidebar and right margin */
 }
 
 /* ---------- Sidebar ---------- */
 .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    background: #f4f6f8;
-    border-right: 1px solid #e3e6ea;
-    padding: 20px 12px;
+  width: 220px;
+  flex-shrink: 0;
+  background: #f4f6f8;
+  border-right: 1px solid #e3e6ea;
+  padding: 20px 12px;
 }
 
 .sidebar__logo {
-    margin: 0 0 24px 8px;
-    font-size: 1.3rem;
-    font-weight: 700;
+  margin: 0 0 24px 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .sidebar__nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .sidebar__nav a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 8px;
-    color: #3a3f44;
-    text-decoration: none;
-    font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #3a3f44;
+  text-decoration: none;
+  font-size: 0.95rem;
 }
 
 .sidebar__nav a:hover {
-    background: #e9edf2;
+  background: #e9edf2;
 }
 
-.sidebar__nav a[aria-current="page"] {
-    background: #dfe7f2;
-    color: #1c1e21;
-    font-weight: 500;
+.sidebar__nav a[aria-current="page"],
+.sidebar__nav a.active {
+  background: #dfe7f2;
+  color: #1c1e21;
+  font-weight: 500;
 }
 
 .sidebar__nav svg {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 /* ---------- Page header ---------- */
 .page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .page-header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .page-header__actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* ---------- Buttons ---------- */
 .btn {
-    padding: 8px 18px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .btn--primary {
-    background: #2f7de1;
-    color: #ffffff;
+  margin: 10px;
+  background: #2f7de1;
+  color: #ffffff;
 }
 
 .btn--primary:hover {
-    background: #276cc6;
+  background: #276cc6;
 }
 
 .btn--secondary {
-    background: #eef1f4;
-    color: #9aa1a9;
+  background: #eef1f4;
+  color: #9aa1a9;
 }
 
 .btn--secondary:disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 .btn--icon {
-    padding: 8px;
-    background: none;
-    color: #6b727a;
-    font-size: 1.1rem;
-    line-height: 1;
+  padding: 8px;
+  background: none;
+  color: #6b727a;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .btn--icon:hover {
-    color: #1c1e21;
+  color: #1c1e21;
+}
+
+.btn--delete {
+  color: #6b727a;
+}
+
+.btn--delete:hover {
+  color: #d92b2b;
+}
+
+/* ---------- View transitions for row removal ---------- */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+}
+
+::view-transition-group(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) {
+    animation-duration: 0ms;
+  }
 }
 
 /* ---------- Needs table ---------- */
 .needs-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #e0e4e8;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e0e4e8;
 }
 
 .needs-table th,
 .needs-table td {
-    border: 1px solid #e0e4e8;
-    padding: 10px 14px;
-    text-align: left;
+  border: 1px solid #e0e4e8;
+  padding: 10px 14px;
+  text-align: left;
 }
 
 .needs-table thead th {
-    background: #f0f2f5;
-    font-size: 0.95rem;
-    font-weight: 600;
+  background: #f0f2f5;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .needs-table thead .sort {
-    color: #9aa1a9;
-    font-weight: 400;
+  color: #9aa1a9;
+  font-weight: 400;
 }
 
 .needs-table tbody tr:nth-child(even) {
-    background: #f7f8fa;
+  background: #f7f8fa;
 }
 
 .needs-table tbody th {
-    font-weight: 500;
+  font-weight: 500;
 }
 
-/* ---------- Number inputs inside the table ---------- */
+.needs-table .row-actions {
+  text-align: center;
+  width: 60px;
+}
+
+/* ---------- Inputs inside the table ---------- */
+.needs-table input[type="number"],
+.needs-table input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #eef0f3;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: inherit;
+}
+
 .needs-table input[type="number"] {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    background: #eef0f3;
-    font-size: 0.95rem;
-    -moz-appearance: textfield;
-    appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
-.needs-table tbody tr:nth-child(odd) input[type="number"] {
-    background: #ffffff;
-    border-color: #e0e4e8;
+.needs-table tbody tr:nth-child(odd) input[type="number"],
+.needs-table tbody tr:nth-child(odd) input[type="text"] {
+  background: #ffffff;
+  border-color: #e0e4e8;
 }
 
-.needs-table input[type="number"]:focus {
-    outline: 2px solid #2f7de1;
-    outline-offset: -1px;
-    background: #ffffff;
+.needs-table input[type="number"]:focus,
+.needs-table input[type="text"]:focus {
+  outline: 2px solid #2f7de1;
+  outline-offset: -1px;
+  background: #ffffff;
 }
 
-/* Hide the default spinner arrows */
+/* Hide the default spinner arrows on number inputs */
 .needs-table input[type="number"]::-webkit-outer-spin-button,
 .needs-table input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
