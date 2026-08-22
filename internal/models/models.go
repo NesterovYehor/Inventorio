@@ -45,7 +45,23 @@ type PropertiesPage struct {
 	Rows   []PropertyRow
 }
 
-func DefaulPropertyRow(id int64, pn []PropertyNeed) *PropertyRow {
+type CalculatorRow struct {
+	Item     ItemName // Makes it cleaner: row.Item.ID and row.Item.Name
+	Need     int
+	Have     int
+	Gap      int
+	Extra    int
+	OrderQty int // Much clearer than EndNumber
+}
+
+type Calculator struct {
+	ID                 int
+	AllProperties      []Property
+	SelectedProperties []Property
+	Rows               []CalculatorRow
+}
+
+func DefaultPropertyRow(id int64, pn []PropertyNeed) *PropertyRow {
 	return &PropertyRow{
 		Property: Property{
 			ID:   id,

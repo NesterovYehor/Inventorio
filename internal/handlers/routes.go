@@ -31,6 +31,8 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("POST /items", h.handleAddItem)
 	mux.HandleFunc("PATCH /items/{id}", h.handleUpdateItem)
 	mux.HandleFunc("DELETE /items/{id}", h.handleDeleteItem)
+	mux.HandleFunc("GET /orders/new", h.HandelNewOrder)
+	mux.HandleFunc("POST /orders/properties", h.HandleAddPropertyToOrder)
 	mux.Handle("GET /static/", ui.StaticHandler())
 
 	return mux

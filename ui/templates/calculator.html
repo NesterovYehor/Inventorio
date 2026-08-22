@@ -1,0 +1,111 @@
+{{define "title"}}Calculator — Inventorio{{end}}
+
+{{define "nav-orders"}}active{{end}}
+
+{{define "content"}}
+<div id="calculator-content">
+  <header class="page-header">
+    <h1>Order Calculator</h1>
+  </header>
+
+  <!-- This calls the block below -->
+  {{template "calculator_update" .}}
+</div>
+{{end}}
+
+{{define "calculator_update"}}
+<div id="calculator-update" class="calculator">
+
+  <!-- Left Side: Selection Panel -->
+  <aside class="calculator__selected">
+    <h2>Current Order Properties</h2>
+
+    <!-- ID added for targeted appends -->
+    <ul id="selected-properties-list">
+      {{range .SelectedProperties}}
+      {{template "property_item" .}}
+      {{end}}
+    </ul>
+
+    <!-- Target ONLY the list, swap at the end -->
+    <form class="calculator__add" hx-post="/orders/properties" hx-target="#selected-properties-list"
+      hx-swap="beforeend">
+      <input type="hidden" name="id" value="{{.ID}}">
+      <select name="property_name" required>
+        <option value="">Select property</option>
+        {{range .AllProperties}}
+        <option value="{{.Name}}">{{.Name}}</option>
+        {{end}}
+      </select>
+      <input type="date" name="property_date" placeholder="Date (optional)">
+      <button class="btn btn--add" type="submit">+</button>
+    </form>
+  </aside>
+
+  <!-- Right Side: Live Calculation Table -->
+  <section class="calculator__table">
+    <h2>Live Order Calculator</h2>
+    <table class="needs-table calculator-table">
+      <thead>
+        <tr>
+          <th>Inventory Item</th>
+          <th>Needed</th>
+          <th>On Hand</th>
+          <th>Gap</th>
+          <th>Extra</th>
+          <th>Order Qty</th>
+        </tr>
+      </thead>
+
+      <!-- ID added for OOB updates -->
+      <tbody id="calculator-tbody">
+        <!-- We pass the .Rows slice directly into the rows template -->
+        {{template "calculator_rows" .Rows}}
+      </tbody>
+    </table>
+
+    <div class="calculator__actions">
+      <button class="btn btn--primary" type="button" hx-post="/orders/confirm" hx-swap="none">Confirm Order</button>
+      <button class="btn btn--danger" type="button" hx-delete="/orders" hx-swap="none">Clear Calculator</button>
+    </div>
+  </section>
+</div>
+{{end}}
+
+<!-- Reusable Single LI Fragment -->
+{{define "property_item"}}
+<li>
+  <span>{{.Name}}</span>
+  <button class="btn btn--icon" type="button" aria-label="Remove {{.Name}}" hx-delete="/orders/properties/{{.ID}}"
+    hx-target="closest li" hx-swap="outerHTML">&times;</button>
+</li>
+{{end}}
+
+<!-- Reusable Table Rows Fragment -->
+{{define "calculator_rows"}}
+{{range .}}
+<tr>
+  <td>{{.Item.Name}}</td>
+  <td>{{.Need}}</td>
+  <td>{{.Have}}</td>
+  <td class="{{if gt .Gap 0}}gap--short{{end}}">{{.Gap}}</td>
+  <td>
+    <!-- Target ONLY the tbody when extra quantity changes -->
+    <input type="number" name="extra" value="{{.Extra}}" min="0" hx-patch="/orders/items/{{.Item.ID}}"
+      hx-target="#calculator-tbody" hx-swap="outerHTML" hx-trigger="change delay:500ms">
+  </td>
+  <td>{{.OrderQty}}</td>
+</tr>
+{{else}}
+<tr class="calculator-table__empty">
+  <td colspan="6">No items in this order yet.</td>
+</tr>
+{{end}}
+{{end}}
+
+<!-- Out of Band (OOB) wrapper for updating the table via HTMX -->
+{{define "calculator_tbody_oob"}}
+<tbody id="calculator-tbody" hx-swap-oob="true">
+  {{template "calculator_rows" .}}
+</tbody>
+{{end}}

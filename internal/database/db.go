@@ -71,6 +71,30 @@ func (db *DB) AddProperty(ctx context.Context) (int64, error) {
 	return id, nil
 }
 
+func (db *DB) GetAllProperties(ctx context.Context) ([]models.Property, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	rows, err := db.conn.QueryContext(ctx, "SELECT * FROM properties")
+	if err != nil {
+		return nil, err
+	}
+
+	ps := []models.Property{}
+	for rows.Next() {
+		p := models.Property{}
+		rows.Scan(
+			&p.ID,
+			&p.Name,
+		)
+		ps = append(ps, p)
+	}
+	if rows.Err() != nil {
+		return nil, err
+	}
+	return ps, nil
+}
+
 func (db *DB) GetAllPropertyRows(ctx context.Context) ([]models.PropertyRow, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 
@@ -176,7 +200,9 @@ func (db *DB) GetNeedsByPropertyID(ctx context.Context, propertyID int64) ([]mod
 	query := `
 		SELECT property_id, item_id, quantity 
 		FROM property_needs 
-		WHERE property_id = ?;
+		WHERE property_id = ?
+		ORDER BY item_id
+		;
 	`
 	rows, err := db.conn.QueryContext(ctx, query, propertyID)
 	if err != nil {
@@ -246,7 +272,8 @@ func (db *DB) GetAllItems(ctx context.Context) ([]models.Item, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	rows, err := db.conn.QueryContext(ctx, "SELECT id, name, quantity FROM items")
+	rows, err := db.conn.QueryContext(ctx, "SELECT id, name, quantity FROM items ORDER BY id")
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to query items: %w", err)
 	}
@@ -272,7 +299,7 @@ func (db *DB) GetAllItemsNames(ctx context.Context) ([]models.ItemName, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	rows, err := db.conn.QueryContext(ctx, "SELECT id, name FROM items")
+	rows, err := db.conn.QueryContext(ctx, "SELECT id, name FROM items ORDER BY id")
 	if err != nil {
 		return nil, fmt.Errorf("failed to query items: %w", err)
 	}
@@ -311,11 +338,120 @@ func (db *DB) DeleteItemById(ctx context.Context, id int64) error {
 	if rowsAffected == 0 {
 		return fmt.Errorf("item with id %d not found", id)
 	}
-	query = "DELETE FROM property_needs WHERE item_id = ?;"
-	result, err = db.conn.ExecContext(ctx, query, id)
-	if err != nil {
-		return fmt.Errorf("failed to delete item with id %d: %w", id, err)
-	}
 
 	return nil
+}
+
+func (db *DB) AddPropertyToOrder(ctx context.Context, prName string, checkInDate *time.Time) error {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	query := `
+	INSERT INTO order_properties (order_id, property_id, arrival_date)
+	SELECT orders.id, properties.id, ?
+	FROM orders
+	CROSS JOIN properties
+	WHERE orders.is_draft = true 
+	  AND properties.name = ?;
+`
+
+	if _, err := db.conn.ExecContext(ctx, query, checkInDate, prName); err != nil {
+		return fmt.Errorf("Failed to add property in order :%w", err)
+	}
+	return nil
+}
+
+func (db *DB) GetOrderRequirements(ctx context.Context, orderID int) ([]models.CalculatorRow, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	// Short, clean query using subqueries
+	query := `
+		SELECT 
+			i.id,
+			i.name,
+			COALESCE((
+				SELECT SUM(pn.quantity) 
+				FROM property_needs pn
+				JOIN order_properties op ON op.property_id = pn.property_id
+				WHERE op.order_id = ? AND pn.item_id = i.id
+			), 0) AS need_qty,
+			COALESCE((
+				SELECT ol.extra_qty 
+				FROM order_lines ol 
+				WHERE ol.order_id = ? AND ol.item_id = i.id
+			), 0) AS extra_qty,
+			i.quantity AS have_stock
+		FROM items i;
+	`
+
+	rows, err := db.conn.QueryContext(ctx, query, orderID, orderID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query requirements: %w", err)
+	}
+	defer rows.Close()
+
+	var results []models.CalculatorRow
+	for rows.Next() {
+		var r models.CalculatorRow
+		if err := rows.Scan(&r.Item.ID, &r.Item.Name, &r.Need, &r.Extra, &r.Have); err != nil {
+			return nil, fmt.Errorf("failed to scan calculator row: %w", err)
+		}
+
+		// Handle the shortfall & order math cleanly in Go
+		if gap := r.Need - r.Have; gap > 0 {
+			r.Gap = gap
+		}
+		if qty := (r.Need + r.Extra) - r.Have; qty > 0 {
+			r.OrderQty = qty
+		}
+
+		results = append(results, r)
+	}
+
+	return results, rows.Err()
+}
+func (db *DB) AddNewOrder(ctx context.Context) (int, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	query := `
+		INSERT INTO orders (is_draft) VALUES (true)
+		ON CONFLICT (is_draft) WHERE is_draft = true
+		DO UPDATE SET is_draft = true
+		RETURNING id;
+	`
+
+	var id int
+	err := db.conn.QueryRowContext(ctx, query).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
+func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.Property, error) {
+	query := `
+		SELECT p.id, p.name 
+		FROM properties p
+		INNER JOIN order_properties op ON p.id = op.property_id
+		WHERE op.order_id = ?;
+	`
+	rows, err := db.conn.QueryContext(ctx, query, orderID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var props []models.Property
+	for rows.Next() {
+		var p models.Property
+		if err := rows.Scan(&p.ID, &p.Name); err != nil {
+			return nil, err
+		}
+		props = append(props, p)
+	}
+
+	return props, nil
 }

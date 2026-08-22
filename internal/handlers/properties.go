@@ -48,7 +48,7 @@ func (h *Handler) handleAddProperty(w http.ResponseWriter, r *http.Request) {
 		log.Println(s)
 		return
 	}
-	row := models.DefaulPropertyRow(id, pn)
+	row := models.DefaultPropertyRow(id, pn)
 	ui.RenderComponent(w, "property-row", row)
 }
 

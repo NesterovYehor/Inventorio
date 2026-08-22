@@ -21,12 +21,20 @@ func InitUI() {
 
 	pageCache["base"] = base
 	pageCache["properties"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/properties.html"))
+	pageCache["calculator"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/calculator.html"))
 	pageCache["storage"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/storage.html"))
 
 	componentCache["item-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
 	componentCache["property-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
-}
 
+	// Single parse loads all definitions: "calculator_update", "property_item", and "calculator_rows"
+	calcTmpl := template.Must(template.ParseFS(templatesFS, "templates/calculator.html"))
+
+	componentCache["calculator_update"] = calcTmpl
+	componentCache["property_item"] = calcTmpl
+	componentCache["calculator_rows"] = calcTmpl
+	componentCache["calculator_tbody_oob"] = calcTmpl // Add the new OOB wrapper
+}
 func RenderContent(w http.ResponseWriter, r *http.Request, pageName string, data any) {
 	tmpl, exist := pageCache[pageName]
 	if !exist {

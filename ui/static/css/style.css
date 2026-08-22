@@ -149,6 +149,15 @@ body {
   color: #d92b2b;
 }
 
+.btn--add {
+  background: #eef1f4;
+  color: #3a3f44;
+}
+
+.btn--add:hover {
+  background: #e9edf2;
+}
+
 /* ---------- View transitions for row removal ---------- */
 ::view-transition-group(*) {
   animation-duration: 300ms;
@@ -238,4 +247,155 @@ body {
 .needs-table input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* ============================================================
+   Calculator page
+   ============================================================ */
+
+.calculator {
+  display: grid;
+  grid-template-columns: 550px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .calculator {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calculator__selected,
+.calculator__table {
+  background: #ffffff;
+  border: 1px solid #e0e4e8;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.calculator__selected h2,
+.calculator__table h2 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.calculator__selected ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calculator__selected li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f7f8fa;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.calculator__add {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.calculator__add select,
+.calculator__add input[type="date"] {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.95rem;
+}
+
+.calculator__add .btn {
+  flex: 0 0 auto;
+  margin: 0;
+  align-self: stretch;
+}
+
+.calculator-table {
+  background: #ffffff;
+}
+
+.calculator-table th,
+.calculator-table td {
+  text-align: center;
+  background: #ffffff;
+}
+
+.calculator-table thead th {
+  background: #ffffff;
+}
+
+.calculator-table tbody tr:nth-child(even) {
+  background: #ffffff;
+}
+
+.calculator-table tbody tr:nth-child(even) td {
+  background: #ffffff;
+}
+
+.calculator-table td:first-child,
+.calculator-table th:first-child {
+  text-align: left;
+}
+
+.calculator-table input[type="number"] {
+  width: 80px;
+  text-align: center;
+}
+
+.gap--short {
+  color: #d92b2b;
+  font-weight: 600;
+}
+
+.calculator-table__empty td {
+  background: #ffffff;
+  color: #6b727a;
+  text-align: center;
+  padding: 24px;
+}
+
+.calculator__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn--danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn--danger:hover {
+  background: #fecaca;
+}
+
+.btn--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.btn--icon:hover {
+  background: #e9edf2;
 }
