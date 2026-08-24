@@ -33,6 +33,7 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("DELETE /items/{id}", h.handleDeleteItem)
 	mux.HandleFunc("GET /orders/new", h.HandelNewOrder)
 	mux.HandleFunc("POST /orders/properties", h.HandleAddPropertyToOrder)
+	mux.HandleFunc("PATCH /orders/items/{id}", h.HandleUpateExtraValue)
 	mux.Handle("GET /static/", ui.StaticHandler())
 
 	return mux

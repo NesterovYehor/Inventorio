@@ -79,12 +79,25 @@ func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Reques
 	ui.RenderComponent(w, "calculator_tbody_oob", rows)
 }
 
-// TODO
 func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) {
+	itemID, _ := strconv.Atoi(r.PathValue("id"))
 
+	value, _ := strconv.Atoi(r.FormValue("extra"))
+	orderID, _ := strconv.Atoi(r.FormValue("id"))
+
+	if err := h.db.UpdateOrderExtraValue(r.Context(), orderID, itemID, value); err != nil {
+		http.Error(w, "failed to update extra value", http.StatusInternalServerError)
+		log.Printf("failed to update extra value: %v/n", err)
+		return
+	}
+	row, err := h.db.GetOrderItemRequirement(r.Context(), orderID, itemID)
+	if err != nil {
+		http.Error(w, "failed to get updated row", http.StatusInternalServerError)
+		log.Printf("failed to get updated row: %v", err)
+		return
+	}
+	ui.RenderComponent(w, "calculator_row", row)
 }
 
-// TODO
 func (h *Handler) HandleRemoveOrderProperty(w http.ResponseWriter, r *http.Request) {
-
 }

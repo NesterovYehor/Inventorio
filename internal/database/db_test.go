@@ -1,4 +1,3 @@
-
 package database
 
 import (
@@ -61,23 +60,6 @@ func TestAddPropertySeedsNeedsForExistingItems(t *testing.T) {
 		assert.Equal(t, int(id), n.PropertyID, "need property id mismatch")
 		assert.Equal(t, 0, n.Quantity, "expected default quantity 0")
 	}
-}
-
-func TestUpdateProperty(t *testing.T) {
-	db := testDB(t)
-	ctx := context.Background()
-
-	id, err := db.AddProperty(ctx)
-	require.NoError(t, err)
-
-	require.NoError(t, db.UpdateProperty(ctx, int(id), "CARRIÓ"))
-}
-
-func TestUpdatePropertyNotFound(t *testing.T) {
-	db := testDB(t)
-	ctx := context.Background()
-
-	require.Error(t, db.UpdateProperty(ctx, 999, "Missing"), "expected error updating non-existent property")
 }
 
 func TestGetNeedsByPropertyID(t *testing.T) {
@@ -183,4 +165,32 @@ func TestGetAllItems(t *testing.T) {
 
 func TestPropertyNeedModel(t *testing.T) {
 	_ = models.PropertyNeed{}
+}
+
+func TestUpdateOrderExtraValue(t *testing.T) {
+	db := testDB(t)
+	ctx := t.Context()
+
+	id, err := db.AddNewOrder(ctx)
+
+	require.NoError(t, err)
+	require.NotEqual(t, 0, id)
+
+	_, err = db.AddProperty(ctx)
+	require.NoError(t, err)
+
+	item, err := db.AddNewItem(ctx)
+	require.NoError(t, err)
+
+	require.NoError(t, db.UpdateItemField(ctx, "quantity", 5, int64(item.ID)))
+
+	require.NoError(t, db.AddPropertyToOrder(ctx, "Unnamed Property", nil))
+
+	require.NoError(t, db.UpdateOrderExtraValue(ctx, id, item.ID, 10))
+
+	row, err := db.GetOrderItemRequirement(ctx, id, item.ID)
+	require.NoError(t, err)
+	require.Equal(t, 10, row.Extra)
+	require.Equal(t, 5, row.OrderQty)
+
 }

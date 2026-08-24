@@ -228,19 +228,15 @@ func (db *DB) AddNewItem(ctx context.Context) (models.Item, error) {
 	defer cancel()
 	var item models.Item
 
-	result, err := db.conn.ExecContext(ctx, `INSERT INTO items DEFAULT VALUES;`)
+	var id int
+	err := db.conn.QueryRowContext(ctx, `INSERT INTO items DEFAULT VALUES RETURNING id;`).Scan(&id)
 	if err != nil {
 		return item, fmt.Errorf("Failed to add new item: %w", err)
 	}
 
-	id, err := result.LastInsertId()
-	if err != nil {
-		return item, fmt.Errorf("Failed to get last item id: %w", err)
-	}
-
 	query := `
 	INSERT INTO property_needs (property_id, item_id, quantity)
-	SELECT ?, id, 0
+	SELECT id, ?, 0
 	FROM properties
 	`
 	if _, err := db.conn.ExecContext(ctx, query, id); err != nil {
@@ -452,6 +448,89 @@ func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.
 		}
 		props = append(props, p)
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
 	return props, nil
+}
+
+func (db *DB) UpdateOrderExtraValue(ctx context.Context, orderID, itemID, value int) error {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	// MUST BE AN INSERT ... ON CONFLICT (UPSERT)
+	query := `
+		INSERT INTO order_lines (order_id, item_id, extra_qty) 
+		VALUES (?, ?, ?)
+		ON CONFLICT (order_id, item_id) 
+		DO UPDATE SET extra_qty = excluded.extra_qty;
+	`
+
+	if _, err := db.conn.ExecContext(ctx, query, orderID, itemID, value); err != nil {
+		return fmt.Errorf("failed to upsert order extra value: %w", err)
+	}
+
+	return nil
+}
+
+func (db *DB) GetOrderItemRequirement(ctx context.Context, orderID, itemID int) (models.CalculatorRow, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	// Added WHERE i.id = ? at the very end
+	query := `
+		SELECT 
+			i.id,
+			i.name,
+			COALESCE((
+				SELECT SUM(pn.quantity) 
+				FROM property_needs pn
+				JOIN order_properties op ON op.property_id = pn.property_id
+				WHERE op.order_id = ? AND pn.item_id = i.id
+			), 0) AS need_qty,
+			COALESCE((
+				SELECT ol.extra_qty 
+				FROM order_lines ol 
+				WHERE ol.order_id = ? AND ol.item_id = i.id
+			), 0) AS extra_qty,
+			i.quantity AS have_stock
+		FROM items i
+		WHERE i.id = ?;
+	`
+
+	var r models.CalculatorRow
+
+	if err := db.conn.QueryRowContext(ctx, query, orderID, orderID, itemID).Scan(
+		&r.Item.ID,
+		&r.Item.Name,
+		&r.Need,
+		&r.Extra,
+		&r.Have,
+	); err != nil {
+		return r, fmt.Errorf("failed to query single item requirement: %w", err)
+	}
+
+	if gap := r.Need - r.Have; gap > 0 {
+		r.Gap = gap
+	}
+	if qty := (r.Need + r.Extra) - r.Have; qty > 0 {
+		r.OrderQty = qty
+	}
+
+	return r, nil
+}
+
+func (db *DB) DeleteOrderProperty(ctx context.Context, orderID, propID int) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	query := `
+		DELETE FROM order_properties
+		WHERE order_id = ? AND property_id = ?;
+	`
+	if _, err := db.conn.ExecContext(ctx, query, orderID, propID); err != nil {
+		return err
+	}
+	return nil
 }

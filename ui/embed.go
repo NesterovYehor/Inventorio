@@ -24,8 +24,10 @@ func InitUI() {
 	pageCache["calculator"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/calculator.html"))
 	pageCache["storage"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/storage.html"))
 
-	componentCache["item-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
-	componentCache["property-row"] = template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
+	rows := template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
+	componentCache["item-row"] = rows
+	componentCache["property-row"] = rows
+	componentCache["calculator_row"] = rows
 
 	// Single parse loads all definitions: "calculator_update", "property_item", and "calculator_rows"
 	calcTmpl := template.Must(template.ParseFS(templatesFS, "templates/calculator.html"))

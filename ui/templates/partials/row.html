@@ -19,7 +19,7 @@
   {{range .PropertyNeed}}
   <td>
     <input type="number" name="quantity" value="{{.Quantity}}" min="0"
-      hx-patch="/properties/{{$.Property.ID}}/items/{{.ItemID}}" hx-trigger="change delay:500ms"  hx-swap="none">
+      hx-patch="/properties/{{$.Property.ID}}/items/{{.ItemID}}" hx-trigger="change delay:500ms" hx-swap="none">
   </td>
   {{end}}
 </tr>
@@ -53,5 +53,20 @@
       </svg>
     </button>
   </td>
+</tr>
+{{end}}
+
+{{define "calculator_row"}}
+<tr id="item-row-{{.Item.ID}}">
+  <td>{{.Item.Name}}</td>
+  <td>{{.Need}}</td>
+  <td>{{.Have}}</td>
+  <td class="{{if gt .Gap 0}}gap--short{{end}}">{{.Gap}}</td>
+  <td>
+    <!-- Added hx-include="[name='id']" to grab the Order ID from the sidebar -->
+    <input type="number" name="extra" value="{{.Extra}}" min="0" hx-patch="/orders/items/{{.Item.ID}}"
+      hx-include="[name='id']" hx-target="#item-row-{{.Item.ID}}" hx-swap="outerHTML" hx-trigger="change delay:500ms">
+  </td>
+  <td>{{.OrderQty}}</td>
 </tr>
 {{end}}

@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS property_needs (
 
 CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  is_draft BOOLEAN NOT NULL DEFAULT true
+  is_draft BOOLEAN NOT NULL DEFAULT true,
+  confirm_date DATETIME
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS one_draft_order ON orders (is_draft)
@@ -28,7 +29,6 @@ WHERE
   is_draft = true;
 
 CREATE TABLE IF NOT EXISTS order_properties (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
   order_id INTEGER NOT NULL,
   property_id INTEGER NOT NULL,
   arrival_date DATETIME,

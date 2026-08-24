@@ -81,28 +81,18 @@
 </li>
 {{end}}
 
-<!-- Reusable Table Rows Fragment -->
+
+<!-- Reusable Table Rows Loop Fragment -->
 {{define "calculator_rows"}}
 {{range .}}
-<tr>
-  <td>{{.Item.Name}}</td>
-  <td>{{.Need}}</td>
-  <td>{{.Have}}</td>
-  <td class="{{if gt .Gap 0}}gap--short{{end}}">{{.Gap}}</td>
-  <td>
-    <!-- Target ONLY the tbody when extra quantity changes -->
-    <input type="number" name="extra" value="{{.Extra}}" min="0" hx-patch="/orders/items/{{.Item.ID}}"
-      hx-target="#calculator-tbody" hx-swap="outerHTML" hx-trigger="change delay:500ms">
-  </td>
-  <td>{{.OrderQty}}</td>
-</tr>
+<!-- Call the single row template and pass the current item (.) to it -->
+{{template "calculator_row" .}}
 {{else}}
 <tr class="calculator-table__empty">
   <td colspan="6">No items in this order yet.</td>
 </tr>
 {{end}}
 {{end}}
-
 <!-- Out of Band (OOB) wrapper for updating the table via HTMX -->
 {{define "calculator_tbody_oob"}}
 <tbody id="calculator-tbody" hx-swap-oob="true">
