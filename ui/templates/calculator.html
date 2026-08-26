@@ -31,6 +31,7 @@
     <form class="calculator__add" hx-post="/orders/properties" hx-target="#selected-properties-list"
       hx-swap="beforeend">
       <input type="hidden" name="id" value="{{.ID}}">
+      <input type="hidden" id="current-order-id" name="order_id" value="{{.ID}}">
       <select name="property_name" required>
         <option value="">Select property</option>
         {{range .AllProperties}}
@@ -76,8 +77,11 @@
 {{define "property_item"}}
 <li>
   <span>{{.Name}}</span>
-  <button class="btn btn--icon" type="button" aria-label="Remove {{.Name}}" hx-delete="/orders/properties/{{.ID}}"
-    hx-target="closest li" hx-swap="outerHTML">&times;</button>
+  <span class="property-date">{{.ArrivalDate}}</span>
+  <button class="btn btn--icon" type="button" aria-label="Remove {{.Name}}" hx-delete="/orders/properties"
+    hx-include="#current-order-id" hx-vals='{"property_id": {{.PropertyID}}}' hx-target="closest li" hx-swap="delete">
+    &times;
+  </button>
 </li>
 {{end}}
 
@@ -93,6 +97,7 @@
 </tr>
 {{end}}
 {{end}}
+
 <!-- Out of Band (OOB) wrapper for updating the table via HTMX -->
 {{define "calculator_tbody_oob"}}
 <tbody id="calculator-tbody" hx-swap-oob="true">

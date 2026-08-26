@@ -54,10 +54,17 @@ type CalculatorRow struct {
 	OrderQty int // Much clearer than EndNumber
 }
 
+type OrderPropertyRow struct {
+	PropertyID  int
+	Name        string
+	ID          int
+	ArrivalDate string
+}
+
 type Calculator struct {
 	ID                 int
 	AllProperties      []Property
-	SelectedProperties []Property
+	SelectedProperties []OrderPropertyRow
 	Rows               []CalculatorRow
 }
 

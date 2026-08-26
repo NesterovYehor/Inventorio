@@ -302,6 +302,13 @@ body {
   font-size: 0.95rem;
 }
 
+.property-date {
+  font-size: 0.85rem;
+  color: #6b727a;
+  margin-left: auto;
+  padding-right: 4px;
+}
+
 .calculator__add {
   display: flex;
   gap: 8px;

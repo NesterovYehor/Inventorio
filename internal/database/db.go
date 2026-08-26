@@ -338,7 +338,7 @@ func (db *DB) DeleteItemById(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (db *DB) AddPropertyToOrder(ctx context.Context, prName string, checkInDate *time.Time) error {
+func (db *DB) AddPropertyToOrder(ctx context.Context, prName, checkInDate string) (models.OrderPropertyRow, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -348,13 +348,16 @@ func (db *DB) AddPropertyToOrder(ctx context.Context, prName string, checkInDate
 	FROM orders
 	CROSS JOIN properties
 	WHERE orders.is_draft = true 
-	  AND properties.name = ?;
+	  AND properties.name = ?
+	RETURNING id, property_id;
 `
 
-	if _, err := db.conn.ExecContext(ctx, query, checkInDate, prName); err != nil {
-		return fmt.Errorf("Failed to add property in order :%w", err)
+	var row models.OrderPropertyRow
+	err := db.conn.QueryRowContext(ctx, query, checkInDate, prName).Scan(&row.ID, &row.PropertyID)
+	if err != nil {
+		return row, err
 	}
-	return nil
+	return row, nil
 }
 
 func (db *DB) GetOrderRequirements(ctx context.Context, orderID int) ([]models.CalculatorRow, error) {
@@ -427,9 +430,9 @@ func (db *DB) AddNewOrder(ctx context.Context) (int, error) {
 	return id, nil
 }
 
-func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.Property, error) {
+func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.OrderPropertyRow, error) {
 	query := `
-		SELECT p.id, p.name 
+	SELECT p.id, p.name, op.id, COALESCE(op.arrival_date, '') 
 		FROM properties p
 		INNER JOIN order_properties op ON p.id = op.property_id
 		WHERE op.order_id = ?;
@@ -440,10 +443,10 @@ func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.
 	}
 	defer rows.Close()
 
-	var props []models.Property
+	var props []models.OrderPropertyRow
 	for rows.Next() {
-		var p models.Property
-		if err := rows.Scan(&p.ID, &p.Name); err != nil {
+		var p models.OrderPropertyRow
+		if err := rows.Scan(&p.PropertyID, &p.Name, &p.ID, &p.ArrivalDate); err != nil {
 			return nil, err
 		}
 		props = append(props, p)
@@ -521,15 +524,15 @@ func (db *DB) GetOrderItemRequirement(ctx context.Context, orderID, itemID int) 
 	return r, nil
 }
 
-func (db *DB) DeleteOrderProperty(ctx context.Context, orderID, propID int) error {
+func (db *DB) DeleteOrderProperty(ctx context.Context, id int) error {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
 	query := `
-		DELETE FROM order_properties
-		WHERE order_id = ? AND property_id = ?;
+	DELETE FROM order_properties
+		WHERE id = ?;
 	`
-	if _, err := db.conn.ExecContext(ctx, query, orderID, propID); err != nil {
+	if _, err := db.conn.ExecContext(ctx, query, id); err != nil {
 		return err
 	}
 	return nil

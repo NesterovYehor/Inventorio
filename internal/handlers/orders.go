@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/NesterovYehor/Inventorio/internal/models"
 	"github.com/NesterovYehor/Inventorio/ui"
@@ -51,22 +50,14 @@ func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Reques
 	name := r.FormValue("property_name")
 	dateStr := r.FormValue("property_date")
 
-	var date *time.Time
-	if dateStr != "" {
-		parsed, err := time.Parse("2006-01-02", dateStr)
-		if err != nil {
-			http.Error(w, "Invalid date format", http.StatusBadRequest)
-			log.Println("Invalid date format")
-			return
-		}
-
-		date = &parsed
-	}
-	if err := h.db.AddPropertyToOrder(r.Context(), name, date); err != nil {
+	propRow, err := h.db.AddPropertyToOrder(r.Context(), name, dateStr)
+	if err != nil {
 		http.Error(w, "faild to add property in to order", http.StatusInternalServerError)
 		log.Printf("faild to add property in to order: %v/n", err)
 		return
 	}
+	propRow.Name = name
+	propRow.ArrivalDate = dateStr
 
 	rows, err := h.db.GetOrderRequirements(r.Context(), id)
 	if err != nil {
@@ -74,7 +65,7 @@ func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Reques
 		log.Printf("faild to get calculated data: %v/n", err)
 		return
 	}
-	ui.RenderComponent(w, "property_item", models.Property{Name: name})
+	ui.RenderComponent(w, "property_item", propRow)
 
 	ui.RenderComponent(w, "calculator_tbody_oob", rows)
 }
@@ -100,4 +91,20 @@ func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *Handler) HandleRemoveOrderProperty(w http.ResponseWriter, r *http.Request) {
+	orderID, _ := strconv.Atoi(r.FormValue("order_id"))
+	propID, _ := strconv.Atoi(r.FormValue("property_id"))
+
+	if err := h.db.DeleteOrderProperty(r.Context(), propID); err != nil {
+		http.Error(w, "failed to delete propety from order", http.StatusInternalServerError)
+		log.Printf("failed to delete propety from order: %v", err)
+		return
+	}
+	rows, err := h.db.GetOrderRequirements(r.Context(), orderID)
+	if err != nil {
+		http.Error(w, "failed to get updated req rows", http.StatusInternalServerError)
+		log.Printf("failed to get updated req rows: %v", err)
+		return
+	}
+
+	ui.RenderComponent(w, "calculator_tbody_oob", rows)
 }
