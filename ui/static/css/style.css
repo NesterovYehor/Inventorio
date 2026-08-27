@@ -88,6 +88,19 @@ body {
   margin-bottom: 20px;
 }
 
+.btn--icon.page-header__close {
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  background: #f4f6f8;
+  border: 1px solid #e0e4e8;
+  border-radius: 12px;
+}
+
+.btn--icon.page-header__close:hover {
+  background: #e9edf2;
+}
+
 .page-header h1 {
   margin: 0;
   font-size: 1.5rem;
@@ -112,17 +125,21 @@ body {
 
 .btn--primary {
   margin: 10px;
-  background: #2f7de1;
+  background: #81C995;
   color: #ffffff;
 }
 
 .btn--primary:hover {
-  background: #276cc6;
+  background: #6ab07e;
 }
 
 .btn--secondary {
   background: #eef1f4;
-  color: #9aa1a9;
+  color: #3a3f44;
+}
+
+.btn--secondary:hover {
+  background: #e4e8ec;
 }
 
 .btn--secondary:disabled {
@@ -237,7 +254,7 @@ body {
 
 .needs-table input[type="number"]:focus,
 .needs-table input[type="text"]:focus {
-  outline: 2px solid #2f7de1;
+  outline: 2px solid #81C995;
   outline-offset: -1px;
   background: #ffffff;
 }
@@ -405,4 +422,32 @@ body {
 
 .btn--icon:hover {
   background: #e9edf2;
+}
+
+/* ============================================================
+   Orders page
+   ============================================================ */
+
+.order-row--draft {
+  border-left: 3px solid #81C995;
+}
+
+.order-row--draft td {
+  color: #81C995;
+  font-weight: 500;
+}
+
+.order-row {
+  cursor: pointer;
+}
+
+.needs-table tbody tr.order-row:hover {
+  background-color: #e9edf2;
+}
+
+.orders__new-btn {
+  display: block;
+  width: 100%;
+  margin: 0 0 16px;
+  text-align: center;
 }

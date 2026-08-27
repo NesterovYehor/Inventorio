@@ -537,3 +537,63 @@ func (db *DB) DeleteOrderProperty(ctx context.Context, id int) error {
 	}
 	return nil
 }
+
+func (db *DB) GetAllOrders(ctx context.Context) ([]models.Order, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT * FROM orders
+		ORDER BY 
+    is_draft DESC,       
+    confirm_date DESC;
+	`
+	rows, err := db.conn.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var orders []models.Order
+
+	for rows.Next() {
+		var order models.Order
+		rows.Scan(
+			&order.ID,
+			&order.IsDraft,
+			&order.ConfirmDate,
+		)
+		orders = append(orders, order)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
+func (db *DB) UpdateOrderStatus(ctx context.Context, orderID int) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	// 1. Grab the current time and format it as an ISO8601/RFC3339 string
+	now := time.Now().Format("2006-01-02")
+
+	// 2. Update the draft status and set the date
+	query := `
+		UPDATE orders 
+		SET is_draft = false, confirm_date = ? 
+		WHERE id = ?;
+	`
+
+	result, err := db.conn.ExecContext(ctx, query, now, orderID)
+	if err != nil {
+		return fmt.Errorf("failed to confirm order: %w", err)
+	}
+
+	// 3. Optional: Verify the row actually existed
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return fmt.Errorf("no draft order found with id %d", orderID)
+	}
+
+	return nil
+}

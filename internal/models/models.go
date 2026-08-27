@@ -27,6 +27,12 @@ type PropertyNeed struct {
 	Quantity   int // E.g., This property needs 6 big towels
 }
 
+type Order struct {
+	ID          int
+	IsDraft     bool
+	ConfirmDate string
+}
+
 // ---------------------------------------------------------
 // VIEW MODELS (Used for HTMX templates, not stored directly in DB)
 // ---------------------------------------------------------
@@ -61,7 +67,7 @@ type OrderPropertyRow struct {
 	ArrivalDate string
 }
 
-type Calculator struct {
+type OrderView struct {
 	ID                 int
 	AllProperties      []Property
 	SelectedProperties []OrderPropertyRow

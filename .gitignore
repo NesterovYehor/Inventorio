@@ -11,6 +11,7 @@ Inventorio
 
 # Output of the go coverage tool
 *.out
+rtk.toml
 
 # Dependency directories (uncomment if you vendor dependencies)
 # vendor/
@@ -34,7 +35,5 @@ tmp/**
 .DS_Store
 
 # IDE / editors
-.idea/
-.vscode/
 *.swp
 *.swo

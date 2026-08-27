@@ -21,8 +21,10 @@ func InitUI() {
 
 	pageCache["base"] = base
 	pageCache["properties"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/properties.html"))
-	pageCache["calculator"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/calculator.html"))
+	pageCache["draft_order"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/draft_order.html"))
+	pageCache["confirmed_order"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/confirmed_order.html"))
 	pageCache["storage"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/storage.html"))
+	pageCache["orders"] = template.Must(template.Must(base.Clone()).ParseFS(templatesFS, "templates/orders.html"))
 
 	rows := template.Must(template.ParseFS(templatesFS, "templates/partials/row.html"))
 	componentCache["item-row"] = rows
@@ -30,12 +32,12 @@ func InitUI() {
 	componentCache["calculator_row"] = rows
 
 	// Single parse loads all definitions: "calculator_update", "property_item", and "calculator_rows"
-	calcTmpl := template.Must(template.ParseFS(templatesFS, "templates/calculator.html"))
+	calcTmpl := template.Must(template.ParseFS(templatesFS, "templates/draft_order.html"))
 
 	componentCache["calculator_update"] = calcTmpl
 	componentCache["property_item"] = calcTmpl
 	componentCache["calculator_rows"] = calcTmpl
-	componentCache["calculator_tbody_oob"] = calcTmpl // Add the new OOB wrapper
+	componentCache["calculator_tbody_oob"] = template.Must(calcTmpl.ParseFS(templatesFS, "templates/partials/row.html"))
 }
 func RenderContent(w http.ResponseWriter, r *http.Request, pageName string, data any) {
 	tmpl, exist := pageCache[pageName]

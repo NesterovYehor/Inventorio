@@ -6,6 +6,7 @@
 <div id="calculator-content">
   <header class="page-header">
     <h1>Order Calculator</h1>
+    <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="Close">&times;</button>
   </header>
 
   <!-- This calls the block below -->
@@ -66,7 +67,8 @@
     </table>
 
     <div class="calculator__actions">
-      <button class="btn btn--primary" type="button" hx-post="/orders/confirm" hx-swap="none">Confirm Order</button>
+      <button class="btn btn--primary" type="button" hx-post="/orders/confirm/{{.ID}}" hx-swap="none"
+        hx-on::after-request="window.location.href='/orders'">Confirm Order</button>
       <button class="btn btn--danger" type="button" hx-delete="/orders" hx-swap="none">Clear Calculator</button>
     </div>
   </section>
@@ -79,7 +81,7 @@
   <span>{{.Name}}</span>
   <span class="property-date">{{.ArrivalDate}}</span>
   <button class="btn btn--icon" type="button" aria-label="Remove {{.Name}}" hx-delete="/orders/properties"
-    hx-include="#current-order-id" hx-vals='{"property_id": {{.PropertyID}}}' hx-target="closest li" hx-swap="delete">
+    hx-include="#current-order-id" hx-vals='{"id": {{.ID}}}' hx-target="closest li" hx-swap="delete">
     &times;
   </button>
 </li>
@@ -100,7 +102,9 @@
 
 <!-- Out of Band (OOB) wrapper for updating the table via HTMX -->
 {{define "calculator_tbody_oob"}}
-<tbody id="calculator-tbody" hx-swap-oob="true">
-  {{template "calculator_rows" .}}
-</tbody>
+<template>
+  <tbody hx-swap-oob="innerHTML:#calculator-tbody">
+    {{template "calculator_rows" .}}
+  </tbody>
+</template>
 {{end}}

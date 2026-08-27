@@ -1,0 +1,38 @@
+{{define "title"}}Orders — Inventorio{{end}}
+
+{{define "nav-orders"}}active{{end}}
+
+{{define "content"}}
+<div id="orders-content">
+  <header class="page-header">
+    <h1>Orders</h1>
+  </header>
+
+  <section class="calculator__table">
+    <h2>Order History</h2>
+
+    <a href="/orders/new" class="btn btn--primary orders__new-btn">+ New Order</a>
+
+    <table class="needs-table">
+      <thead>
+        <tr>
+          <th scope="col">Order ID</th>
+          <th scope="col">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .}}
+        <tr class="order-row {{if .IsDraft}}order-row--draft{{end}}" onclick="window.location.href='/orders/{{.ID}}?draft={{.IsDraft}}'">
+          <td>#{{.ID}}</td>
+          <td>{{if .ConfirmDate}}{{.ConfirmDate}}{{else}}—{{end}}</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">No orders yet.</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </section>
+</div>
+{{end}}
