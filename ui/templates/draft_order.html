@@ -1,12 +1,12 @@
-{{define "title"}}Calculator — Inventorio{{end}}
+{{define "title"}}{{.T "title_calculator"}}{{end}}
 
 {{define "nav-orders"}}active{{end}}
 
 {{define "content"}}
 <div id="calculator-content">
   <header class="page-header">
-    <h1>Order Calculator</h1>
-    <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="Close">&times;</button>
+    <h1>{{.T "page_calculator"}}</h1>
+    <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="{{.T "close"}}">&times;</button>
   </header>
 
   <!-- This calls the block below -->
@@ -19,11 +19,11 @@
 
   <!-- Left Side: Selection Panel -->
   <aside class="calculator__selected">
-    <h2>Current Order Properties</h2>
+    <h2>{{.T "current_order_properties"}}</h2>
 
     <!-- ID added for targeted appends -->
     <ul id="selected-properties-list">
-      {{range .SelectedProperties}}
+      {{range .Data.SelectedProperties}}
       {{template "property_item" .}}
       {{end}}
     </ul>
@@ -31,45 +31,45 @@
     <!-- Target ONLY the list, swap at the end -->
     <form class="calculator__add" hx-post="/orders/properties" hx-target="#selected-properties-list"
       hx-swap="beforeend">
-      <input type="hidden" name="id" value="{{.ID}}">
-      <input type="hidden" id="current-order-id" name="order_id" value="{{.ID}}">
+      <input type="hidden" name="id" value="{{.Data.ID}}">
+      <input type="hidden" id="current-order-id" name="order_id" value="{{.Data.ID}}">
       <select name="property_name" required>
-        <option value="">Select property</option>
-        {{range .AllProperties}}
+        <option value="">{{.T "select_property"}}</option>
+        {{range .Data.AllProperties}}
         <option value="{{.Name}}">{{.Name}}</option>
         {{end}}
       </select>
-      <input type="date" name="property_date" placeholder="Date (optional)">
+      <input type="date" name="property_date" placeholder="{{.T "date_optional"}}">
       <button class="btn btn--add" type="submit">+</button>
     </form>
   </aside>
 
   <!-- Right Side: Live Calculation Table -->
   <section class="calculator__table">
-    <h2>Live Order Calculator</h2>
+    <h2>{{.T "live_order_calculator"}}</h2>
     <table class="needs-table calculator-table">
       <thead>
         <tr>
-          <th>Inventory Item</th>
-          <th>Needed</th>
-          <th>On Hand</th>
-          <th>Gap</th>
-          <th>Extra</th>
-          <th>Order Qty</th>
+          <th>{{.T "inventory_item"}}</th>
+          <th>{{.T "needed"}}</th>
+          <th>{{.T "on_hand"}}</th>
+          <th>{{.T "gap"}}</th>
+          <th>{{.T "extra"}}</th>
+          <th>{{.T "order_qty"}}</th>
         </tr>
       </thead>
 
       <!-- ID added for OOB updates -->
       <tbody id="calculator-tbody">
         <!-- We pass the .Rows slice directly into the rows template -->
-        {{template "calculator_rows" .Rows}}
+        {{template "calculator_rows" .Data.Rows}}
       </tbody>
     </table>
 
     <div class="calculator__actions">
-      <button class="btn btn--primary" type="button" hx-post="/orders/confirm/{{.ID}}" hx-swap="none"
-        hx-on::after-request="window.location.href='/orders'">Confirm Order</button>
-      <button class="btn btn--danger" type="button" hx-delete="/orders" hx-swap="none">Clear Calculator</button>
+      <button class="btn btn--primary" type="button" hx-post="/orders/confirm/{{.Data.ID}}" hx-swap="none"
+        hx-on::after-request="window.location.href='/orders'">{{.T "confirm_order"}}</button>
+      <button class="btn btn--danger" type="button" hx-delete="/orders" hx-swap="none">{{.T "clear_calculator"}}</button>
     </div>
   </section>
 </div>
@@ -77,11 +77,12 @@
 
 <!-- Reusable Single LI Fragment -->
 {{define "property_item"}}
+{{$row := .Data}}{{if not $row}}{{$row = .}}{{end}}
 <li>
-  <span>{{.Name}}</span>
-  <span class="property-date">{{.ArrivalDate}}</span>
-  <button class="btn btn--icon" type="button" aria-label="Remove {{.Name}}" hx-delete="/orders/properties"
-    hx-include="#current-order-id" hx-vals='{"id": {{.ID}}}' hx-target="closest li" hx-swap="delete">
+  <span>{{$row.Name}}</span>
+  <span class="property-date">{{$row.ArrivalDate}}</span>
+  <button class="btn btn--icon" type="button" aria-label="{{$.T "remove"}} {{$row.Name}}" hx-delete="/orders/properties"
+    hx-include="#current-order-id" hx-vals='{"id": {{$row.ID}}}' hx-target="closest li" hx-swap="delete">
     &times;
   </button>
 </li>
@@ -95,7 +96,7 @@
 {{template "calculator_row" .}}
 {{else}}
 <tr class="calculator-table__empty">
-  <td colspan="6">No items in this order yet.</td>
+  <td colspan="6">{{$.T "no_items_order"}}</td>
 </tr>
 {{end}}
 {{end}}
@@ -104,7 +105,7 @@
 {{define "calculator_tbody_oob"}}
 <template>
   <tbody hx-swap-oob="innerHTML:#calculator-tbody">
-    {{template "calculator_rows" .}}
+    {{template "calculator_rows" .Data}}
   </tbody>
 </template>
 {{end}}

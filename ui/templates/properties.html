@@ -1,19 +1,19 @@
-{{define "title"}}Properties — Inventorio{{end}}
+{{define "title"}}{{.T "title_properties"}}{{end}}
 
 {{define "nav-properties"}}active{{end}}
 
 {{define "content"}}
 <div id="properties-content">
   <header class="page-header">
-    <h1>Properties Needs Definition</h1>
+    <h1>{{.T "page_properties"}}</h1>
   </header>
 
   <table class="needs-table">
     <thead>
-      {{template "property-header-row" .Header}}
+      {{template "property-header-row" .}}
     </thead>
     <tbody id="properties-list">
-      {{range .Rows}}
+      {{range .Data.Rows}}
       {{template "property-row" .}}
       {{end}}
     </tbody>
@@ -21,7 +21,7 @@
 
   <div style="margin-top: 1rem;">
     <button class="btn btn--primary" type="button" hx-post="/properties" hx-target="#properties-list"
-      hx-swap="beforeend">Add Property</button>
+      hx-swap="beforeend">{{.T "add_property"}}</button>
   </div>
 </div>
 {{end}}

@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-
-	"github.com/NesterovYehor/Inventorio/ui"
 )
 
 func (h *Handler) handleItems(w http.ResponseWriter, r *http.Request) {
@@ -16,9 +14,8 @@ func (h *Handler) handleItems(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed to get items:%v", err)
 		return
 	}
-	ui.RenderContent(w, r, "storage", items)
+	h.render.Content(w, r, "storage", items)
 }
-
 
 func (h *Handler) handleAddItem(w http.ResponseWriter, r *http.Request) {
 	item, err := h.db.AddNewItem(r.Context())
@@ -28,7 +25,7 @@ func (h *Handler) handleAddItem(w http.ResponseWriter, r *http.Request) {
 		log.Println(s)
 		return
 	}
-	ui.RenderComponent(w, "item-row", item)
+	h.render.Component(w, r, "item-row", item)
 }
 
 func (h *Handler) handleUpdateItem(w http.ResponseWriter, r *http.Request) {

@@ -1,28 +1,28 @@
-{{define "title"}}Confirmed Order — Inventorio{{end}}
+{{define "title"}}{{.T "title_confirmed"}}{{end}}
 
 {{define "nav-orders"}}active{{end}}
 
 {{define "content"}}
 <div id="confirmed-order-content">
   <header class="page-header">
-    <h1>Confirmed Order</h1>
-    <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="Close">&times;</button>
+    <h1>{{.T "page_confirmed"}}</h1>
+    <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="{{.T "close"}}">&times;</button>
   </header>
 
   <section class="calculator__table">
     <table class="needs-table calculator-table">
       <thead>
         <tr>
-          <th>Inventory Item</th>
-          <th>Needed</th>
-          <th>On Hand</th>
-          <th>Gap</th>
-          <th>Extra</th>
-          <th>Order Qty</th>
+          <th>{{.T "inventory_item"}}</th>
+          <th>{{.T "needed"}}</th>
+          <th>{{.T "on_hand"}}</th>
+          <th>{{.T "gap"}}</th>
+          <th>{{.T "extra"}}</th>
+          <th>{{.T "order_qty"}}</th>
         </tr>
       </thead>
       <tbody>
-        {{range .Rows}}
+        {{range .Data.Rows}}
         <tr id="item-row-{{.Item.ID}}">
           <td>{{.Item.Name}}</td>
           <td>{{.Need}}</td>
@@ -33,7 +33,7 @@
         </tr>
         {{else}}
         <tr class="calculator-table__empty">
-          <td colspan="6">No items in this order.</td>
+          <td colspan="6">{{.T "no_items_order_alt"}}</td>
         </tr>
         {{end}}
       </tbody>

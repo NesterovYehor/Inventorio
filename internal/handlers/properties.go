@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/NesterovYehor/Inventorio/internal/models"
-	"github.com/NesterovYehor/Inventorio/ui"
 )
 
 func (h *Handler) handleProperties(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +29,7 @@ func (h *Handler) handleProperties(w http.ResponseWriter, r *http.Request) {
 		Header: header,
 		Rows:   rows,
 	}
-	ui.RenderContent(w, r, "properties", pp)
+	h.render.Content(w, r, "properties", pp)
 }
 
 func (h *Handler) handleAddProperty(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +48,7 @@ func (h *Handler) handleAddProperty(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	row := models.DefaultPropertyRow(id, pn)
-	ui.RenderComponent(w, "property-row", row)
+	h.render.Component(w, r, "property-row", row)
 }
 
 func (h *Handler) handleUpdatePropertyName(w http.ResponseWriter, r *http.Request) {

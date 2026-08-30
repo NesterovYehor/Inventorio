@@ -1,29 +1,28 @@
-{{define "title"}}Storage — Inventorio{{end}}
+{{define "title"}}{{.T "title_storage"}}{{end}}
 
 {{define "nav-storage"}}active{{end}}
 
 {{define "content"}}
 <div id="storage-content">
   <header class="page-header">
-    <h1>Storage</h1>
+    <h1>{{.T "page_storage"}}</h1>
   </header>
 
   <table class="needs-table">
     <thead>
       <tr>
-        <th scope="col">Name <span class="sort">&uarr;</span></th>
-        <th scope="col">Quantity <span class="sort">&#8693;</span></th>
-        <th scope="col" class="row-actions">Delete</th>
+        <th scope="col">{{.T "name"}} <span class="sort">&uarr;</span></th>
+        <th scope="col">{{.T "quantity"}} <span class="sort">&#8693;</span></th>
+        <th scope="col" class="row-actions">{{.T "delete"}}</th>
       </tr>
     </thead>
     <tbody id="storage-rows">
-      {{range .}}
+      {{range .Data}}
       {{template "item-row" .}}
       {{end}}
     </tbody>
   </table>
 
-  <button class="btn btn--primary" type="button" hx-post="/items" hx-target="#storage-rows" hx-swap="beforeend">Add
-    Item</button>
+  <button class="btn btn--primary" type="button" hx-post="/items" hx-target="#storage-rows" hx-swap="beforeend">{{.T "add_item"}}</button>
 </div>
 {{end}}

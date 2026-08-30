@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/NesterovYehor/Inventorio/internal/models"
-	"github.com/NesterovYehor/Inventorio/ui"
 )
 
 func (h *Handler) HandelNewOrder(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +25,7 @@ func (h *Handler) HandelNewOrder(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	ui.RenderContent(w, r, "draft_order", order)
+	h.render.Content(w, r, "draft_order", order)
 }
 
 func (h *Handler) HandleOrdersList(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +36,7 @@ func (h *Handler) HandleOrdersList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ui.RenderContent(w, r, "orders", orders)
+	h.render.Content(w, r, "orders", orders)
 }
 
 func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Request) {
@@ -60,9 +59,9 @@ func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Reques
 		log.Printf("faild to get calculated data: %v/n", err)
 		return
 	}
-	ui.RenderComponent(w, "property_item", propRow)
+	h.render.Component(w, r, "property_item", propRow)
 
-	ui.RenderComponent(w, "calculator_tbody_oob", rows)
+	h.render.Component(w, r, "calculator_tbody_oob", rows)
 }
 
 func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +81,7 @@ func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) 
 		log.Printf("failed to get updated row: %v", err)
 		return
 	}
-	ui.RenderComponent(w, "calculator_row", row)
+	h.render.Component(w, r, "calculator_row", row)
 }
 
 func (h *Handler) HandleRemoveOrderProperty(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +99,7 @@ func (h *Handler) HandleRemoveOrderProperty(w http.ResponseWriter, r *http.Reque
 		log.Printf("failed to get updated req rows: %v", err)
 		return
 	}
-	ui.RenderComponent(w, "calculator_tbody_oob", rows)
+	h.render.Component(w, r, "calculator_tbody_oob", rows)
 }
 
 func (h *Handler) HandleCofirmOrder(w http.ResponseWriter, r *http.Request) {
@@ -124,11 +123,11 @@ func (h *Handler) HandleOrder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isDraft == "true" {
-		ui.RenderContent(w, r, "draft_order", order)
+		h.render.Content(w, r, "draft_order", order)
 		return
 	}
 
-	ui.RenderContent(w, r, "confirmed_order", order)
+	h.render.Content(w, r, "confirmed_order", order)
 }
 
 // This is a helper on the Handler, not the DB!

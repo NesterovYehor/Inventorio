@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/NesterovYehor/Inventorio/internal/database"
@@ -9,13 +10,15 @@ import (
 
 // The Handler struct only holds what the web layer needs.
 type Handler struct {
-	db *database.DB
+	db     *database.DB
+	render *ui.Renderer
 }
 
 // New creates the handler and injects the dependencies.
-func New(db *database.DB) *Handler {
+func New(db *database.DB, render *ui.Renderer) *Handler {
 	return &Handler{
-		db: db,
+		db:     db,
+		render: render,
 	}
 }
 
@@ -23,6 +26,7 @@ func New(db *database.DB) *Handler {
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", h.handleIndex)
+	mux.HandleFunc("GET /change-language", h.handleIndex)
 	mux.HandleFunc("GET /properties", h.handleProperties)
 	mux.HandleFunc("POST /properties", h.handleAddProperty)
 	mux.HandleFunc("PATCH /properties/{id}", h.handleUpdatePropertyName)
@@ -40,9 +44,19 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("DELETE /orders/properties", h.HandleRemoveOrderProperty)
 	mux.Handle("GET /static/", ui.StaticHandler())
 
-	return mux
+	return LanguageMiddleware(mux)
 }
 
 func (h *Handler) handleIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/items", http.StatusSeeOther)
+}
+
+func (h *Handler) handleChangeLanguage(w http.ResponseWriter, r *http.Request) {
+	lang := r.FormValue("lang")
+	if lang == "" {
+		http.Error(w, "No language passed", http.StatusBadRequest)
+		log.Println("No language passed")
+		return
+	}
+	http.SetCookie(w, &http.Cookie{})
 }

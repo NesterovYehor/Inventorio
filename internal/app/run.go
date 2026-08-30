@@ -23,9 +23,10 @@ func Setup(dbPath string, port string) (*App, error) {
 		return nil, fmt.Errorf("Error during setup: %w", err)
 	}
 
-	ui.InitUI()
+	renderer := ui.NewRenderer()
+	renderer.InitUI()
 
-	h := handlers.New(db)
+	h := handlers.New(db, renderer)
 	server := &http.Server{
 		Addr:    port,
 		Handler: h.Routes(),
