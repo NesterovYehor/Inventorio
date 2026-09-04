@@ -18,7 +18,7 @@ func (h *Handler) handleItems(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleAddItem(w http.ResponseWriter, r *http.Request) {
-	item, err := h.db.AddNewItem(r.Context())
+	item, err := h.db.CreateNewItem(r.Context())
 	if err != nil {
 		s := fmt.Sprintf("Failed to add new item:%v", err)
 		http.Error(w, s, http.StatusInternalServerError)

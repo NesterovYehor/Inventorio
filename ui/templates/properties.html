@@ -14,7 +14,7 @@
     </thead>
     <tbody id="properties-list">
       {{range .Data.Rows}}
-      {{template "property-row" .}}
+      {{template "property-row" ($.Wrap .)}}
       {{end}}
     </tbody>
   </table>

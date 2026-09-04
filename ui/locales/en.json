@@ -1,48 +1,270 @@
-{
-  "nav_properties": "Properties",
-  "nav_storage": "Storage",
-  "nav_orders": "Orders",
-  "title_inventorio": "Inventorio",
-  "title_properties": "Properties - Inventorio",
-  "title_storage": "Storage - Inventorio",
-  "title_orders": "Orders - Inventorio",
-  "title_calculator": "Calculator - Inventorio",
-  "title_confirmed": "Confirmed Order - Inventorio",
-  "page_properties": "Properties Needs Definition",
-  "page_storage": "Storage",
-  "page_orders": "Orders",
-  "page_calculator": "Order Calculator",
-  "page_confirmed": "Confirmed Order",
-  "order_history": "Order History",
-  "new_order": "+ New Order",
-  "order_id": "Order ID",
-  "date": "Date",
-  "no_orders": "No orders yet.",
-  "current_order_properties": "Current Order Properties",
-  "select_property": "Select property",
-  "date_optional": "Date (optional)",
-  "live_order_calculator": "Live Order Calculator",
-  "inventory_item": "Inventory Item",
-  "needed": "Needed",
-  "on_hand": "On Hand",
-  "gap": "Gap",
-  "extra": "Extra",
-  "order_qty": "Order Qty",
-  "no_items_order": "No items in this order yet.",
-  "no_items_order_alt": "No items in this order.",
-  "confirm_order": "Confirm Order",
-  "clear_calculator": "Clear Calculator",
-  "remove": "Remove",
-  "name": "Name",
-  "quantity": "Quantity",
-  "delete": "Delete",
-  "add_item": "Add Item",
-  "property_name": "Property Name",
-  "add_property": "Add Property",
-  "close": "Close",
-  "delete_item": "Delete item",
-  "language": "Language",
-  "lang_en": "English",
-  "lang_ru": "Русский",
-  "lang_es": "Español"
-}
+[
+  {
+    "id": "nav_properties",
+    "translation": "Properties"
+  },
+  {
+    "id": "nav_storage",
+    "translation": "Storage"
+  },
+  {
+    "id": "nav_orders",
+    "translation": "Orders"
+  },
+  {
+    "id": "title_inventorio",
+    "translation": "Inventorio"
+  },
+  {
+    "id": "title_properties",
+    "translation": "Properties - Inventorio"
+  },
+  {
+    "id": "title_storage",
+    "translation": "Storage - Inventorio"
+  },
+  {
+    "id": "title_orders",
+    "translation": "Orders - Inventorio"
+  },
+  {
+    "id": "title_calculator",
+    "translation": "Calculator - Inventorio"
+  },
+  {
+    "id": "title_confirmed",
+    "translation": "Confirmed Order - Inventorio"
+  },
+  {
+    "id": "page_properties",
+    "translation": "Properties Needs Definition"
+  },
+  {
+    "id": "page_storage",
+    "translation": "Storage"
+  },
+  {
+    "id": "page_orders",
+    "translation": "Orders"
+  },
+  {
+    "id": "page_calculator",
+    "translation": "Order Calculator"
+  },
+  {
+    "id": "page_confirmed",
+    "translation": "Confirmed Order"
+  },
+  {
+    "id": "order_history",
+    "translation": "Order History"
+  },
+  {
+    "id": "new_order",
+    "translation": "+ New Order"
+  },
+  {
+    "id": "order_id",
+    "translation": "Order ID"
+  },
+  {
+    "id": "date",
+    "translation": "Date"
+  },
+  {
+    "id": "no_orders",
+    "translation": "No orders yet."
+  },
+  {
+    "id": "current_order_properties",
+    "translation": "Current Order Properties"
+  },
+  {
+    "id": "select_property",
+    "translation": "Select property"
+  },
+  {
+    "id": "date_optional",
+    "translation": "Date (optional)"
+  },
+  {
+    "id": "live_order_calculator",
+    "translation": "Live Order Calculator"
+  },
+  {
+    "id": "inventory_item",
+    "translation": "Inventory Item"
+  },
+  {
+    "id": "needed",
+    "translation": "Needed"
+  },
+  {
+    "id": "on_hand",
+    "translation": "On Hand"
+  },
+  {
+    "id": "gap",
+    "translation": "Gap"
+  },
+  {
+    "id": "extra",
+    "translation": "Extra"
+  },
+  {
+    "id": "order_qty",
+    "translation": "Order Qty"
+  },
+  {
+    "id": "no_items_order",
+    "translation": "No items in this order yet."
+  },
+  {
+    "id": "no_items_order_alt",
+    "translation": "No items in this order."
+  },
+  {
+    "id": "confirm_order",
+    "translation": "Confirm Order"
+  },
+  {
+    "id": "clear_calculator",
+    "translation": "Clear Calculator"
+  },
+  {
+    "id": "remove",
+    "translation": "Remove"
+  },
+  {
+    "id": "name",
+    "translation": "Name"
+  },
+  {
+    "id": "quantity",
+    "translation": "Quantity"
+  },
+  {
+    "id": "delete",
+    "translation": "Delete"
+  },
+  {
+    "id": "add_item",
+    "translation": "Add Item"
+  },
+  {
+    "id": "property_name",
+    "translation": "Property Name"
+  },
+  {
+    "id": "add_property",
+    "translation": "Add Property"
+  },
+  {
+    "id": "close",
+    "translation": "Close"
+  },
+  {
+    "id": "delete_item",
+    "translation": "Delete item"
+  },
+  {
+    "id": "language",
+    "translation": "Language"
+  },
+  {
+    "id": "lang_en",
+    "translation": "English"
+  },
+  {
+    "id": "lang_ru",
+    "translation": "Русский"
+  },
+  {
+    "id": "lang_es",
+    "translation": "Español"
+  },
+  {
+    "id": "nav_arrivals",
+    "translation": "Arrivals"
+  },
+  {
+    "id": "title_arrivals",
+    "translation": "Arrivals - Inventorio"
+  },
+  {
+    "id": "page_arrivals",
+    "translation": "Arrivals"
+  },
+  {
+    "id": "add_arrival",
+    "translation": "Add Arrival"
+  },
+  {
+    "id": "arrival_object",
+    "translation": "Object"
+  },
+  {
+    "id": "arrival_date",
+    "translation": "Date"
+  },
+  {
+    "id": "arrival_status",
+    "translation": "Status"
+  },
+  {
+    "id": "arrival_status_pending",
+    "translation": "Pending"
+  },
+  {
+    "id": "arrival_status_completed",
+    "translation": "Done"
+  },
+  {
+    "id": "arrival_status_cancelled",
+    "translation": "Cancel"
+  },
+  {
+    "id": "arrival_mark_done",
+    "translation": "Mark as done"
+  },
+  {
+    "id": "arrival_delete",
+    "translation": "Delete arrival"
+  },
+  {
+    "id": "no_arrivals",
+    "translation": "No arrivals yet."
+  },
+  {
+    "id": "new_arrival",
+    "translation": "New Arrival"
+  },
+  {
+    "id": "edit_arrival",
+    "translation": "Edit Arrival"
+  },
+  {
+    "id": "save",
+    "translation": "Save"
+  },
+  {
+    "id": "confirm",
+    "translation": "Confirm"
+  },
+  {
+    "id": "cancel",
+    "translation": "Cancel"
+  },
+  {
+    "id": "edit",
+    "translation": "Edit"
+  },
+  {
+    "id": "create",
+    "translation": "Create"
+  },
+  {
+    "id": "select_arrival_object",
+    "translation": "Select object"
+  }
+]

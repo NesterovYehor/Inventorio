@@ -26,7 +26,7 @@ func New(db *database.DB, render *ui.Renderer) *Handler {
 func (h *Handler) Routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", h.handleIndex)
-	mux.HandleFunc("GET /change-language", h.handleIndex)
+	mux.HandleFunc("GET /change-language", h.handleChangeLanguage)
 	mux.HandleFunc("GET /properties", h.handleProperties)
 	mux.HandleFunc("POST /properties", h.handleAddProperty)
 	mux.HandleFunc("PATCH /properties/{id}", h.handleUpdatePropertyName)
@@ -39,9 +39,15 @@ func (h *Handler) Routes() http.Handler {
 	mux.HandleFunc("GET /orders/{id}", h.HandleOrder)
 	mux.HandleFunc("GET /orders/new", h.HandelNewOrder)
 	mux.HandleFunc("POST /orders/confirm/{id}", h.HandleCofirmOrder)
-	mux.HandleFunc("POST /orders/properties", h.HandleAddPropertyToOrder)
 	mux.HandleFunc("PATCH /orders/items/{id}", h.HandleUpateExtraValue)
 	mux.HandleFunc("DELETE /orders/properties", h.HandleRemoveOrderProperty)
+	mux.HandleFunc("GET /arrivals", h.handleArrivals)
+	mux.HandleFunc("GET /arrivals/new", h.handleNewArrivalMenu)
+	mux.HandleFunc("POST /arrivals", h.handeleAddArrival)
+	mux.HandleFunc("PATCH /arrivals/{id}/status", h.handleUpdateArrivalStatus)
+	mux.HandleFunc("GET /arrivals/{id}/details/update", h.handleArrivalUpdateMenu)
+	mux.HandleFunc("PATCH /arrivals/{id}/details", h.handleUpdateArrivalDetails)
+	mux.HandleFunc("DELETE /arrivals/{id}", h.handleDeleteArrival)
 	mux.Handle("GET /static/", ui.StaticHandler())
 
 	return LanguageMiddleware(mux)
@@ -58,5 +64,13 @@ func (h *Handler) handleChangeLanguage(w http.ResponseWriter, r *http.Request) {
 		log.Println("No language passed")
 		return
 	}
-	http.SetCookie(w, &http.Cookie{})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "lang",
+		Value:    lang,
+		Path:     "/",
+		MaxAge:   31536000,
+		HttpOnly: true,
+		Secure:   false,
+	})
+	w.Header().Add("HX-Refresh", "true")
 }

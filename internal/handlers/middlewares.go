@@ -13,6 +13,18 @@ func LanguageMiddleware(next http.Handler) http.Handler {
 			lang = cookie.Value
 		}
 
+		if q := r.URL.Query().Get("lang"); q != "" {
+			lang = q
+			http.SetCookie(w, &http.Cookie{
+				Name:     "lang",
+				Value:    q,
+				Path:     "/",
+				MaxAge:   60 * 60 * 24 * 365,
+				HttpOnly: true,
+				SameSite: http.SameSiteStrictMode,
+			})
+		}
+
 		// Put the language into the request's "backpack" (Context)
 		ctx := context.WithValue(r.Context(), "lang", lang)
 
@@ -20,4 +32,3 @@ func LanguageMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-

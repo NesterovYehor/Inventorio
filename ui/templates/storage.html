@@ -13,12 +13,12 @@
       <tr>
         <th scope="col">{{.T "name"}} <span class="sort">&uarr;</span></th>
         <th scope="col">{{.T "quantity"}} <span class="sort">&#8693;</span></th>
-        <th scope="col" class="row-actions">{{.T "delete"}}</th>
+        <th scope="col" class="row-actions"></th>
       </tr>
     </thead>
     <tbody id="storage-rows">
       {{range .Data}}
-      {{template "item-row" .}}
+      {{template "item-row" ($.Wrap .)}}
       {{end}}
     </tbody>
   </table>

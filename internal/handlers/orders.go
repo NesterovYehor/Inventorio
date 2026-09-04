@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) HandelNewOrder(w http.ResponseWriter, r *http.Request) {
-	id, err := h.db.AddNewOrder(r.Context())
+	id, err := h.db.CreateNewOrder(r.Context())
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to create new order: %v", err), http.StatusInternalServerError)
 		log.Println(err)
@@ -37,31 +37,6 @@ func (h *Handler) HandleOrdersList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.render.Content(w, r, "orders", orders)
-}
-
-func (h *Handler) HandleAddPropertyToOrder(w http.ResponseWriter, r *http.Request) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	name := r.FormValue("property_name")
-	dateStr := r.FormValue("property_date")
-
-	propRow, err := h.db.AddPropertyToOrder(r.Context(), name, dateStr)
-	if err != nil {
-		http.Error(w, "faild to add property in to order", http.StatusInternalServerError)
-		log.Printf("faild to add property in to order: %v/n", err)
-		return
-	}
-	propRow.Name = name
-	propRow.ArrivalDate = dateStr
-
-	rows, err := h.db.GetOrderRequirements(r.Context(), id)
-	if err != nil {
-		http.Error(w, "faild to get calculated data", http.StatusInternalServerError)
-		log.Printf("faild to get calculated data: %v/n", err)
-		return
-	}
-	h.render.Component(w, r, "property_item", propRow)
-
-	h.render.Component(w, r, "calculator_tbody_oob", rows)
 }
 
 func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) {

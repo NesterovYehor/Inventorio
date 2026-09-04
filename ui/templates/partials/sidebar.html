@@ -35,6 +35,17 @@
           {{.T "nav_orders"}}
         </a>
       </li>
+      <li>
+        <a href="/arrivals" class="{{block " nav-arrivals" .}}{{end}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 21h18" />
+            <path d="M5 21V7l8-4 8 4v14" />
+            <path d="M10 21v-9h4v9" />
+          </svg>
+          {{.T "nav_arrivals"}}
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -45,12 +56,11 @@
       <path d="M2 12h20" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
     </svg>
-    <select name="lang" id="lang-select" aria-label="{{.T "language"}}">
-      <option value="en">{{.T "lang_en"}}</option>
-      <option value="ru">{{.T "lang_ru"}}</option>
-      <option value="es">{{.T "lang_es"}}</option>
+    <select name="lang" id="lang-select" aria-label="{{.T "language"}}" onchange="this.form.submit()">
+      <option value="en" {{if eq .Lang "en"}}selected{{end}}>{{.T "lang_en"}}</option>
+      <option value="ru" {{if eq .Lang "ru"}}selected{{end}}>{{.T "lang_ru"}}</option>
+      <option value="es" {{if eq .Lang "es"}}selected{{end}}>{{.T "lang_es"}}</option>
     </select>
-    <button type="submit" class="btn btn--icon" aria-label="{{.T "language"}}">✓</button>
   </form>
 </aside>
 {{end}}

@@ -33,7 +33,7 @@ func (h *Handler) handleProperties(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleAddProperty(w http.ResponseWriter, r *http.Request) {
-	id, err := h.db.AddProperty(r.Context())
+	id, err := h.db.CreateProperty(r.Context())
 	if err != nil {
 		s := fmt.Sprintf("Failed to add new property:%v", err)
 		http.Error(w, s, http.StatusInternalServerError)

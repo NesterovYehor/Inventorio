@@ -24,7 +24,7 @@
     <!-- ID added for targeted appends -->
     <ul id="selected-properties-list">
       {{range .Data.SelectedProperties}}
-      {{template "property_item" .}}
+      {{template "property_item" ($.Wrap .)}}
       {{end}}
     </ul>
 
@@ -77,12 +77,11 @@
 
 <!-- Reusable Single LI Fragment -->
 {{define "property_item"}}
-{{$row := .Data}}{{if not $row}}{{$row = .}}{{end}}
 <li>
-  <span>{{$row.Name}}</span>
-  <span class="property-date">{{$row.ArrivalDate}}</span>
-  <button class="btn btn--icon" type="button" aria-label="{{$.T "remove"}} {{$row.Name}}" hx-delete="/orders/properties"
-    hx-include="#current-order-id" hx-vals='{"id": {{$row.ID}}}' hx-target="closest li" hx-swap="delete">
+  <span>{{.Data.Name}}</span>
+  <span class="property-date">{{.Data.ArrivalDate}}</span>
+  <button class="btn btn--icon" type="button" aria-label="{{.T "remove"}} {{.Data.Name}}" hx-delete="/orders/properties"
+    hx-include="#current-order-id" hx-vals='{"id": {{.Data.ID}}}' hx-target="closest li" hx-swap="delete">
     &times;
   </button>
 </li>
@@ -93,7 +92,7 @@
 {{define "calculator_rows"}}
 {{range .}}
 <!-- Call the single row template and pass the current item (.) to it -->
-{{template "calculator_row" .}}
+{{template "calculator_row" ($.Wrap .)}}
 {{else}}
 <tr class="calculator-table__empty">
   <td colspan="6">{{$.T "no_items_order"}}</td>

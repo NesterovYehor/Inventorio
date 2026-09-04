@@ -32,7 +32,7 @@ func TestAddProperty(t *testing.T) {
 	db := testDB(t)
 	ctx := context.Background()
 
-	id, err := db.AddProperty(ctx)
+	id, err := db.CreateProperty(ctx)
 	require.NoError(t, err)
 	require.Greater(t, id, int64(0), "expected positive property id")
 
@@ -45,12 +45,12 @@ func TestAddPropertySeedsNeedsForExistingItems(t *testing.T) {
 	db := testDB(t)
 	ctx := context.Background()
 
-	_, err := db.AddNewItem(ctx)
+	_, err := db.CreateNewItem(ctx)
 	require.NoError(t, err)
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
-	id, err := db.AddProperty(ctx)
+	id, err := db.CreateProperty(ctx)
 	require.NoError(t, err)
 
 	needs, err := db.GetNeedsByPropertyID(ctx, id)
@@ -66,14 +66,14 @@ func TestGetNeedsByPropertyID(t *testing.T) {
 	db := testDB(t)
 	ctx := context.Background()
 
-	propID, err := db.AddProperty(ctx)
+	propID, err := db.CreateProperty(ctx)
 	require.NoError(t, err)
 
 	needs, err := db.GetNeedsByPropertyID(ctx, propID)
 	require.NoError(t, err)
 	require.Empty(t, needs, "expected no needs initially")
 
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
 	needs, err = db.GetNeedsByPropertyID(ctx, propID)
@@ -86,7 +86,7 @@ func TestAddNewItem(t *testing.T) {
 	db := testDB(t)
 	ctx := context.Background()
 
-	item, err := db.AddNewItem(ctx)
+	item, err := db.CreateNewItem(ctx)
 	require.NoError(t, err)
 	require.Greater(t, item.ID, 0, "expected positive item id")
 	assert.Empty(t, item.Name, "expected empty default name")
@@ -98,10 +98,10 @@ func TestAddNewItemSeedsNeedsForExistingItems(t *testing.T) {
 	ctx := context.Background()
 
 	// Add a property first; then adding items should create needs for it.
-	propID, err := db.AddProperty(ctx)
+	propID, err := db.CreateProperty(ctx)
 	require.NoError(t, err)
 
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
 	needs, err := db.GetNeedsByPropertyID(ctx, propID)
@@ -109,7 +109,7 @@ func TestAddNewItemSeedsNeedsForExistingItems(t *testing.T) {
 	require.Len(t, needs, 1, "expected 1 need after adding item")
 	assert.Equal(t, 1, needs[0].ItemID)
 
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
 	needs, err = db.GetNeedsByPropertyID(ctx, propID)
@@ -121,7 +121,7 @@ func TestUpdateItemField(t *testing.T) {
 	db := testDB(t)
 	ctx := context.Background()
 
-	item, err := db.AddNewItem(ctx)
+	item, err := db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
 	require.NoError(t, db.UpdateItemField(ctx, "name", "Big Towels", int64(item.ID)))
@@ -149,9 +149,9 @@ func TestGetAllItems(t *testing.T) {
 	require.NoError(t, err)
 	require.Empty(t, items, "expected empty items initially")
 
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
-	_, err = db.AddNewItem(ctx)
+	_, err = db.CreateNewItem(ctx)
 	require.NoError(t, err)
 
 	items, err = db.GetAllItems(ctx)
@@ -165,32 +165,4 @@ func TestGetAllItems(t *testing.T) {
 
 func TestPropertyNeedModel(t *testing.T) {
 	_ = models.PropertyNeed{}
-}
-
-func TestUpdateOrderExtraValue(t *testing.T) {
-	db := testDB(t)
-	ctx := t.Context()
-
-	id, err := db.AddNewOrder(ctx)
-
-	require.NoError(t, err)
-	require.NotEqual(t, 0, id)
-
-	_, err = db.AddProperty(ctx)
-	require.NoError(t, err)
-
-	item, err := db.AddNewItem(ctx)
-	require.NoError(t, err)
-
-	require.NoError(t, db.UpdateItemField(ctx, "quantity", 5, int64(item.ID)))
-
-	require.NoError(t, db.AddPropertyToOrder(ctx, "Unnamed Property", nil))
-
-	require.NoError(t, db.UpdateOrderExtraValue(ctx, id, item.ID, 10))
-
-	row, err := db.GetOrderItemRequirement(ctx, id, item.ID)
-	require.NoError(t, err)
-	require.Equal(t, 10, row.Extra)
-	require.Equal(t, 5, row.OrderQty)
-
 }

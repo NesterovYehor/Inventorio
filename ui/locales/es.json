@@ -1,48 +1,270 @@
-{
-  "nav_properties": "Propiedades",
-  "nav_storage": "Almacén",
-  "nav_orders": "Pedidos",
-  "title_inventorio": "Inventorio",
-  "title_properties": "Propiedades - Inventorio",
-  "title_storage": "Almacén - Inventorio",
-  "title_orders": "Pedidos - Inventorio",
-  "title_calculator": "Calculadora - Inventorio",
-  "title_confirmed": "Pedido confirmado - Inventorio",
-  "page_properties": "Definición de necesidades de propiedades",
-  "page_storage": "Almacén",
-  "page_orders": "Pedidos",
-  "page_calculator": "Calculadora de pedidos",
-  "page_confirmed": "Pedido confirmado",
-  "order_history": "Historial de pedidos",
-  "new_order": "+ Nuevo pedido",
-  "order_id": "ID de pedido",
-  "date": "Fecha",
-  "no_orders": "Aún no hay pedidos.",
-  "current_order_properties": "Propiedades del pedido actual",
-  "select_property": "Seleccionar propiedad",
-  "date_optional": "Fecha (opcional)",
-  "live_order_calculator": "Calculadora de pedidos en vivo",
-  "inventory_item": "Artículo de inventario",
-  "needed": "Necesario",
-  "on_hand": "Disponible",
-  "gap": "Déficit",
-  "extra": "Extra",
-  "order_qty": "Cantidad",
-  "no_items_order": "Aún no hay artículos en este pedido.",
-  "no_items_order_alt": "No hay artículos en este pedido.",
-  "confirm_order": "Confirmar pedido",
-  "clear_calculator": "Borrar calculadora",
-  "remove": "Eliminar",
-  "name": "Nombre",
-  "quantity": "Cantidad",
-  "delete": "Eliminar",
-  "add_item": "Agregar artículo",
-  "property_name": "Nombre de propiedad",
-  "add_property": "Agregar propiedad",
-  "close": "Cerrar",
-  "delete_item": "Eliminar artículo",
-  "language": "Idioma",
-  "lang_en": "English",
-  "lang_ru": "Русский",
-  "lang_es": "Español"
-}
+[
+  {
+    "id": "nav_properties",
+    "translation": "Propiedades"
+  },
+  {
+    "id": "nav_storage",
+    "translation": "Almacén"
+  },
+  {
+    "id": "nav_orders",
+    "translation": "Pedidos"
+  },
+  {
+    "id": "title_inventorio",
+    "translation": "Inventorio"
+  },
+  {
+    "id": "title_properties",
+    "translation": "Propiedades - Inventorio"
+  },
+  {
+    "id": "title_storage",
+    "translation": "Almacén - Inventorio"
+  },
+  {
+    "id": "title_orders",
+    "translation": "Pedidos - Inventorio"
+  },
+  {
+    "id": "title_calculator",
+    "translation": "Calculadora - Inventorio"
+  },
+  {
+    "id": "title_confirmed",
+    "translation": "Pedido confirmado - Inventorio"
+  },
+  {
+    "id": "page_properties",
+    "translation": "Definición de necesidades de propiedades"
+  },
+  {
+    "id": "page_storage",
+    "translation": "Almacén"
+  },
+  {
+    "id": "page_orders",
+    "translation": "Pedidos"
+  },
+  {
+    "id": "page_calculator",
+    "translation": "Calculadora de pedidos"
+  },
+  {
+    "id": "page_confirmed",
+    "translation": "Pedido confirmado"
+  },
+  {
+    "id": "order_history",
+    "translation": "Historial de pedidos"
+  },
+  {
+    "id": "new_order",
+    "translation": "+ Nuevo pedido"
+  },
+  {
+    "id": "order_id",
+    "translation": "ID de pedido"
+  },
+  {
+    "id": "date",
+    "translation": "Fecha"
+  },
+  {
+    "id": "no_orders",
+    "translation": "Aún no hay pedidos."
+  },
+  {
+    "id": "current_order_properties",
+    "translation": "Propiedades del pedido actual"
+  },
+  {
+    "id": "select_property",
+    "translation": "Seleccionar propiedad"
+  },
+  {
+    "id": "date_optional",
+    "translation": "Fecha (opcional)"
+  },
+  {
+    "id": "live_order_calculator",
+    "translation": "Calculadora de pedidos en vivo"
+  },
+  {
+    "id": "inventory_item",
+    "translation": "Artículo de inventario"
+  },
+  {
+    "id": "needed",
+    "translation": "Necesario"
+  },
+  {
+    "id": "on_hand",
+    "translation": "Disponible"
+  },
+  {
+    "id": "gap",
+    "translation": "Déficit"
+  },
+  {
+    "id": "extra",
+    "translation": "Extra"
+  },
+  {
+    "id": "order_qty",
+    "translation": "Cantidad"
+  },
+  {
+    "id": "no_items_order",
+    "translation": "Aún no hay artículos en este pedido."
+  },
+  {
+    "id": "no_items_order_alt",
+    "translation": "No hay artículos en este pedido."
+  },
+  {
+    "id": "confirm_order",
+    "translation": "Confirmar pedido"
+  },
+  {
+    "id": "clear_calculator",
+    "translation": "Borrar calculadora"
+  },
+  {
+    "id": "remove",
+    "translation": "Eliminar"
+  },
+  {
+    "id": "name",
+    "translation": "Nombre"
+  },
+  {
+    "id": "quantity",
+    "translation": "Cantidad"
+  },
+  {
+    "id": "delete",
+    "translation": "Eliminar"
+  },
+  {
+    "id": "add_item",
+    "translation": "Agregar artículo"
+  },
+  {
+    "id": "property_name",
+    "translation": "Nombre de propiedad"
+  },
+  {
+    "id": "add_property",
+    "translation": "Agregar propiedad"
+  },
+  {
+    "id": "close",
+    "translation": "Cerrar"
+  },
+  {
+    "id": "delete_item",
+    "translation": "Eliminar artículo"
+  },
+  {
+    "id": "language",
+    "translation": "Idioma"
+  },
+  {
+    "id": "lang_en",
+    "translation": "English"
+  },
+  {
+    "id": "lang_ru",
+    "translation": "Русский"
+  },
+  {
+    "id": "lang_es",
+    "translation": "Español"
+  },
+  {
+    "id": "nav_arrivals",
+    "translation": "Llegadas"
+  },
+  {
+    "id": "title_arrivals",
+    "translation": "Llegadas - Inventorio"
+  },
+  {
+    "id": "page_arrivals",
+    "translation": "Llegadas"
+  },
+  {
+    "id": "add_arrival",
+    "translation": "Agregar llegada"
+  },
+  {
+    "id": "arrival_object",
+    "translation": "Objeto"
+  },
+  {
+    "id": "arrival_date",
+    "translation": "Fecha"
+  },
+  {
+    "id": "arrival_status",
+    "translation": "Estado"
+  },
+  {
+    "id": "arrival_status_pending",
+    "translation": "Pendiente"
+  },
+  {
+    "id": "arrival_status_completed",
+    "translation": "Hecho"
+  },
+  {
+    "id": "arrival_status_cancelled",
+    "translation": "Cancelar"
+  },
+  {
+    "id": "arrival_mark_done",
+    "translation": "Marcar como hecho"
+  },
+  {
+    "id": "arrival_delete",
+    "translation": "Eliminar llegada"
+  },
+  {
+    "id": "no_arrivals",
+    "translation": "Aún no hay llegadas."
+  },
+  {
+    "id": "new_arrival",
+    "translation": "Nueva llegada"
+  },
+  {
+    "id": "edit_arrival",
+    "translation": "Editar llegada"
+  },
+  {
+    "id": "save",
+    "translation": "Guardar"
+  },
+  {
+    "id": "confirm",
+    "translation": "Confirmar"
+  },
+  {
+    "id": "cancel",
+    "translation": "Cancelar"
+  },
+  {
+    "id": "edit",
+    "translation": "Editar"
+  },
+  {
+    "id": "create",
+    "translation": "Crear"
+  },
+  {
+    "id": "select_arrival_object",
+    "translation": "Seleccionar objeto"
+  }
+]

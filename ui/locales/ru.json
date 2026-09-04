@@ -1,48 +1,270 @@
-{
-  "nav_properties": "Свойства",
-  "nav_storage": "Склад",
-  "nav_orders": "Заказы",
-  "title_inventorio": "Inventorio",
-  "title_properties": "Свойства - Inventorio",
-  "title_storage": "Склад - Inventorio",
-  "title_orders": "Заказы - Inventorio",
-  "title_calculator": "Калькулятор - Inventorio",
-  "title_confirmed": "Подтверждённый заказ - Inventorio",
-  "page_properties": "Определение потребностей свойств",
-  "page_storage": "Склад",
-  "page_orders": "Заказы",
-  "page_calculator": "Калькулятор заказа",
-  "page_confirmed": "Подтверждённый заказ",
-  "order_history": "История заказов",
-  "new_order": "+ Новый заказ",
-  "order_id": "ID заказа",
-  "date": "Дата",
-  "no_orders": "Пока нет заказов.",
-  "current_order_properties": "Текущие свойства заказа",
-  "select_property": "Выберите свойство",
-  "date_optional": "Дата (необязательно)",
-  "live_order_calculator": "Калькулятор заказа",
-  "inventory_item": "Товар",
-  "needed": "Необходимо",
-  "on_hand": "В наличии",
-  "gap": "Недостача",
-  "extra": "Дополнительно",
-  "order_qty": "Кол-во заказа",
-  "no_items_order": "В этом заказе пока нет товаров.",
-  "no_items_order_alt": "В этом заказе нет товаров.",
-  "confirm_order": "Подтвердить заказ",
-  "clear_calculator": "Очистить калькулятор",
-  "remove": "Удалить",
-  "name": "Название",
-  "quantity": "Количество",
-  "delete": "Удалить",
-  "add_item": "Добавить товар",
-  "property_name": "Название свойства",
-  "add_property": "Добавить свойство",
-  "close": "Закрыть",
-  "delete_item": "Удалить товар",
-  "language": "Язык",
-  "lang_en": "English",
-  "lang_ru": "Русский",
-  "lang_es": "Español"
-}
+[
+  {
+    "id": "nav_properties",
+    "translation": "Свойства"
+  },
+  {
+    "id": "nav_storage",
+    "translation": "Склад"
+  },
+  {
+    "id": "nav_orders",
+    "translation": "Заказы"
+  },
+  {
+    "id": "title_inventorio",
+    "translation": "Inventorio"
+  },
+  {
+    "id": "title_properties",
+    "translation": "Свойства - Inventorio"
+  },
+  {
+    "id": "title_storage",
+    "translation": "Склад - Inventorio"
+  },
+  {
+    "id": "title_orders",
+    "translation": "Заказы - Inventorio"
+  },
+  {
+    "id": "title_calculator",
+    "translation": "Калькулятор - Inventorio"
+  },
+  {
+    "id": "title_confirmed",
+    "translation": "Подтверждённый заказ - Inventorio"
+  },
+  {
+    "id": "page_properties",
+    "translation": "Определение потребностей свойств"
+  },
+  {
+    "id": "page_storage",
+    "translation": "Склад"
+  },
+  {
+    "id": "page_orders",
+    "translation": "Заказы"
+  },
+  {
+    "id": "page_calculator",
+    "translation": "Калькулятор заказа"
+  },
+  {
+    "id": "page_confirmed",
+    "translation": "Подтверждённый заказ"
+  },
+  {
+    "id": "order_history",
+    "translation": "История заказов"
+  },
+  {
+    "id": "new_order",
+    "translation": "+ Новый заказ"
+  },
+  {
+    "id": "order_id",
+    "translation": "ID заказа"
+  },
+  {
+    "id": "date",
+    "translation": "Дата"
+  },
+  {
+    "id": "no_orders",
+    "translation": "Пока нет заказов."
+  },
+  {
+    "id": "current_order_properties",
+    "translation": "Текущие свойства заказа"
+  },
+  {
+    "id": "select_property",
+    "translation": "Выберите свойство"
+  },
+  {
+    "id": "date_optional",
+    "translation": "Дата (необязательно)"
+  },
+  {
+    "id": "live_order_calculator",
+    "translation": "Калькулятор заказа"
+  },
+  {
+    "id": "inventory_item",
+    "translation": "Товар"
+  },
+  {
+    "id": "needed",
+    "translation": "Необходимо"
+  },
+  {
+    "id": "on_hand",
+    "translation": "В наличии"
+  },
+  {
+    "id": "gap",
+    "translation": "Недостача"
+  },
+  {
+    "id": "extra",
+    "translation": "Дополнительно"
+  },
+  {
+    "id": "order_qty",
+    "translation": "Кол-во заказа"
+  },
+  {
+    "id": "no_items_order",
+    "translation": "В этом заказе пока нет товаров."
+  },
+  {
+    "id": "no_items_order_alt",
+    "translation": "В этом заказе нет товаров."
+  },
+  {
+    "id": "confirm_order",
+    "translation": "Подтвердить заказ"
+  },
+  {
+    "id": "clear_calculator",
+    "translation": "Очистить калькулятор"
+  },
+  {
+    "id": "remove",
+    "translation": "Удалить"
+  },
+  {
+    "id": "name",
+    "translation": "Наименование"
+  },
+  {
+    "id": "quantity",
+    "translation": "Количество"
+  },
+  {
+    "id": "delete",
+    "translation": "Удалить"
+  },
+  {
+    "id": "add_item",
+    "translation": "Добавить товар"
+  },
+  {
+    "id": "property_name",
+    "translation": "Название свойства"
+  },
+  {
+    "id": "add_property",
+    "translation": "Добавить свойство"
+  },
+  {
+    "id": "close",
+    "translation": "Закрыть"
+  },
+  {
+    "id": "delete_item",
+    "translation": "Удалить товар"
+  },
+  {
+    "id": "language",
+    "translation": "Язык"
+  },
+  {
+    "id": "lang_en",
+    "translation": "English"
+  },
+  {
+    "id": "lang_ru",
+    "translation": "Русский"
+  },
+  {
+    "id": "lang_es",
+    "translation": "Español"
+  },
+  {
+    "id": "nav_arrivals",
+    "translation": "Прибытия"
+  },
+  {
+    "id": "title_arrivals",
+    "translation": "Прибытия - Inventorio"
+  },
+  {
+    "id": "page_arrivals",
+    "translation": "Прибытия"
+  },
+  {
+    "id": "add_arrival",
+    "translation": "Добавить прибытие"
+  },
+  {
+    "id": "arrival_object",
+    "translation": "Объект"
+  },
+  {
+    "id": "arrival_date",
+    "translation": "Дата"
+  },
+  {
+    "id": "arrival_status",
+    "translation": "Статус"
+  },
+  {
+    "id": "arrival_status_pending",
+    "translation": "В ожидании"
+  },
+  {
+    "id": "arrival_status_completed",
+    "translation": "Готово"
+  },
+  {
+    "id": "arrival_status_cancelled",
+    "translation": "Отмена"
+  },
+  {
+    "id": "arrival_mark_done",
+    "translation": "Отметить как готовое"
+  },
+  {
+    "id": "arrival_delete",
+    "translation": "Удалить прибытие"
+  },
+  {
+    "id": "no_arrivals",
+    "translation": "Пока нет прибытий."
+  },
+  {
+    "id": "new_arrival",
+    "translation": "Новое прибытие"
+  },
+  {
+    "id": "edit_arrival",
+    "translation": "Редактировать прибытие"
+  },
+  {
+    "id": "save",
+    "translation": "Сохранить"
+  },
+  {
+    "id": "confirm",
+    "translation": "Подтвердить"
+  },
+  {
+    "id": "cancel",
+    "translation": "Отмена"
+  },
+  {
+    "id": "edit",
+    "translation": "Редактировать"
+  },
+  {
+    "id": "create",
+    "translation": "Создать"
+  },
+  {
+    "id": "select_arrival_object",
+    "translation": "Выбрать объект"
+  }
+]

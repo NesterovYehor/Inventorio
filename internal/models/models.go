@@ -33,6 +33,13 @@ type Order struct {
 	ConfirmDate string
 }
 
+type Arrival struct {
+	ID          int
+	Name        string
+	ArrivalDate string
+	Status      string
+}
+
 // ---------------------------------------------------------
 // VIEW MODELS (Used for HTMX templates, not stored directly in DB)
 // ---------------------------------------------------------
@@ -72,6 +79,11 @@ type OrderView struct {
 	AllProperties      []Property
 	SelectedProperties []OrderPropertyRow
 	Rows               []CalculatorRow
+}
+
+type ArrivalModal struct {
+	Arrival    Arrival
+	Properties []Property
 }
 
 func DefaultPropertyRow(id int64, pn []PropertyNeed) *PropertyRow {

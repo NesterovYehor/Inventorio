@@ -28,12 +28,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS one_draft_order ON orders (is_draft)
 WHERE
   is_draft = true;
 
-CREATE TABLE IF NOT EXISTS order_properties (
+CREATE TABLE IF NOT EXISTS arrivals (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  order_id INTEGER NOT NULL,
   property_id INTEGER NOT NULL,
-  arrival_date TEXT,
-  FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+  arrival_date TEXT NOT NULL,
+  status TEXT DEFAULT 'pending',
   FOREIGN KEY (property_id) REFERENCES properties (id) ON DELETE CASCADE
 );
 

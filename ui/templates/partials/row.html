@@ -8,43 +8,41 @@
 {{end}}
 
 {{define "property-row"}}
-{{$row := .Data}}{{if not $row}}{{$row = .}}{{end}}
-<tr id="property-row-{{$row.Property.ID}}">
+<tr id="property-row-{{.Data.Property.ID}}">
   <!-- Property Name Cell with Autosave -->
   <th scope="row">
-    <input type="text" name="name" value="{{$row.Property.Name}}" hx-patch="/properties/{{$row.Property.ID}}"
+    <input type="text" name="name" value="{{.Data.Property.Name}}" hx-patch="/properties/{{.Data.Property.ID}}"
       hx-trigger="change delay:500ms" hx-swap="none">
   </th>
 
   <!-- Dynamic Item Cells -->
-  {{range $row.PropertyNeed}}
+  {{range .Data.PropertyNeed}}
   <td>
     <input type="number" name="quantity" value="{{.Quantity}}" min="0"
-      hx-patch="/properties/{{$row.Property.ID}}/items/{{.ItemID}}" hx-trigger="change delay:500ms" hx-swap="none">
+      hx-patch="/properties/{{$.Data.Property.ID}}/items/{{.ItemID}}" hx-trigger="change delay:500ms" hx-swap="none">
   </td>
   {{end}}
 </tr>
 {{end}}
 
 {{define "item-row"}}
-{{$row := .Data}}{{if not $row}}{{$row = .}}{{end}}
-<tr id="item-row-{{$row.ID}}" style="view-transition-name: item-row-{{$row.ID}}">
+<tr id="item-row-{{.Data.ID}}" style="view-transition-name: item-row-{{.Data.ID}}">
   <!-- Item Name Cell with Autosave -->
   <th scope="row">
-    <input type="text" name="name" value="{{$row.Name}}" hx-patch="/items/{{$row.ID}}" hx-trigger="change delay:500ms"
+    <input type="text" name="name" value="{{.Data.Name}}" hx-patch="/items/{{.Data.ID}}" hx-trigger="change delay:500ms"
       hx-swap="none">
   </th>
 
   <!-- Quantity Cell with Autosave -->
   <td>
-    <input type="number" name="quantity" value="{{$row.Quantity}}" min="0" hx-patch="/items/{{$row.ID}}"
+    <input type="number" name="quantity" value="{{.Data.Quantity}}" min="0" hx-patch="/items/{{.Data.ID}}"
       hx-trigger="change delay:500ms" hx-swap="none">
   </td>
 
   <!-- Delete Action -->
   <td class="row-actions">
-    <button class="btn btn--icon btn--delete" type="button" aria-label="{{$.T "delete_item"}}" hx-delete="/items/{{$row.ID}}"
-      hx-target="#item-row-{{$row.ID}}" hx-swap="outerHTML swap:300ms transition:true">
+    <button class="btn btn--icon btn--delete" type="button" aria-label="{{.T "delete_item"}}" hx-delete="/items/{{.Data.ID}}"
+      hx-target="#item-row-{{.Data.ID}}" hx-swap="outerHTML swap:300ms transition:true">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M3 6h18" />
@@ -59,17 +57,16 @@
 {{end}}
 
 {{define "calculator_row"}}
-{{$row := .Data}}{{if not $row}}{{$row = .}}{{end}}
-<tr id="item-row-{{$row.Item.ID}}">
-  <td>{{$row.Item.Name}}</td>
-  <td>{{$row.Need}}</td>
-  <td>{{$row.Have}}</td>
-  <td class="{{if gt $row.Gap 0}}gap--short{{end}}">{{$row.Gap}}</td>
+<tr id="item-row-{{.Data.Item.ID}}">
+  <td>{{.Data.Item.Name}}</td>
+  <td>{{.Data.Need}}</td>
+  <td>{{.Data.Have}}</td>
+  <td class="{{if gt .Data.Gap 0}}gap--short{{end}}">{{.Data.Gap}}</td>
   <td>
     <!-- Added hx-include="[name='id']" to grab the Order ID from the sidebar -->
-    <input type="number" name="extra" value="{{$row.Extra}}" min="0" hx-patch="/orders/items/{{$row.Item.ID}}"
-      hx-include="[name='id']" hx-target="#item-row-{{$row.Item.ID}}" hx-swap="outerHTML" hx-trigger="change delay:500ms">
+    <input type="number" name="extra" value="{{.Data.Extra}}" min="0" hx-patch="/orders/items/{{.Data.Item.ID}}"
+      hx-include="[name='id']" hx-target="#item-row-{{.Data.Item.ID}}" hx-swap="outerHTML" hx-trigger="change delay:500ms">
   </td>
-  <td>{{$row.OrderQty}}</td>
+  <td>{{.Data.OrderQty}}</td>
 </tr>
 {{end}}

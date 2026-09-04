@@ -487,3 +487,207 @@ body {
   margin: 0 0 16px;
   text-align: center;
 }
+
+/* ============================================================
+   Arrivals page
+   ============================================================ */
+
+.arrivals__add-btn {
+  display: block;
+  width: 100%;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.arrivals__table {
+  margin-top: 16px;
+}
+
+.arrival-select,
+.arrival-date {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.95rem;
+  color: #3a3f44;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-pending {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn--success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.btn--success:hover {
+  background: #bbf7d0;
+}
+
+.arrivals-table__empty td {
+  color: #6b727a;
+  text-align: center;
+  padding: 24px;
+}
+
+.arrivals__table .needs-table th,
+.arrivals__table .needs-table td {
+  padding: 4px 10px;
+}
+
+.arrivals__table .row-actions__group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.arrivals__table .needs-table th:nth-child(2),
+.arrivals__table .needs-table td:nth-child(2) {
+  width: 120px;
+}
+
+.arrivals__table .needs-table th:nth-child(3),
+.arrivals__table .needs-table td:nth-child(3) {
+  width: 140px;
+}
+
+.arrivals__table .needs-table th.row-actions,
+.arrivals__table .needs-table td.row-actions {
+  width: 110px;
+}
+
+.arrival-status-select {
+  width: 100%;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.arrival-status-select.status-pending {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.arrival-status-select.status-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.arrival-status-select.status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.arrival-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrival-modal.active {
+  display: flex;
+}
+
+.arrival-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.arrival-modal__content {
+  position: relative;
+  background: #1f2226;
+  border-radius: 16px;
+  padding: 28px;
+  width: 420px;
+  max-width: 90%;
+  color: #ffffff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.arrival-modal__content h2 {
+  margin: 0 0 24px;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.arrival-modal__field {
+  margin-bottom: 20px;
+}
+
+.arrival-modal__field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #b0b3b8;
+}
+
+.arrival-modal .arrival-select,
+.arrival-modal .arrival-date {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #3a3d42;
+  border-radius: 8px;
+  background: #2c2f33;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.arrival-modal .arrival-select option {
+  background: #2c2f33;
+  color: #ffffff;
+}
+
+.arrival-modal__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.arrival-modal__actions .btn--secondary {
+  background: transparent;
+  color: #b0b3b8;
+}
+
+.arrival-modal__actions .btn--secondary:hover {
+  color: #ffffff;
+}
+
+.arrival-modal__actions .btn--primary {
+  flex: 1;
+  max-width: 180px;
+  margin: 0;
+}
