@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS property_needs (
 CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   is_draft BOOLEAN NOT NULL DEFAULT true,
+  start_date TEXT,
+  end_date TEXT,
   confirm_date DATETIME
 );
 

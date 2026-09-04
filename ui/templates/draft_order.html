@@ -17,30 +17,25 @@
 {{define "calculator_update"}}
 <div id="calculator-update" class="calculator">
 
-  <!-- Left Side: Selection Panel -->
+  <!-- Left Side: Date Range Panel -->
   <aside class="calculator__selected">
-    <h2>{{.T "current_order_properties"}}</h2>
+    <h2>{{.T "order_date_range"}}</h2>
 
-    <!-- ID added for targeted appends -->
-    <ul id="selected-properties-list">
-      {{range .Data.SelectedProperties}}
-      {{template "property_item" ($.Wrap .)}}
-      {{end}}
-    </ul>
-
-    <!-- Target ONLY the list, swap at the end -->
-    <form class="calculator__add" hx-post="/orders/properties" hx-target="#selected-properties-list"
-      hx-swap="beforeend">
+    <form class="date-range-form" hx-post="/orders/{{.Data.ID}}" hx-target="#calculator-update"
+      hx-swap="outerHTML">
       <input type="hidden" name="id" value="{{.Data.ID}}">
-      <input type="hidden" id="current-order-id" name="order_id" value="{{.Data.ID}}">
-      <select name="property_name" required>
-        <option value="">{{.T "select_property"}}</option>
-        {{range .Data.AllProperties}}
-        <option value="{{.Name}}">{{.Name}}</option>
-        {{end}}
-      </select>
-      <input type="date" name="property_date" placeholder="{{.T "date_optional"}}">
-      <button class="btn btn--add" type="submit">+</button>
+
+      <div class="date-range-form__field">
+        <label for="start_data">{{.T "start_date"}}</label>
+        <input type="date" id="start_data" name="start_data" value="{{.Data.StartDate}}" required>
+      </div>
+
+      <div class="date-range-form__field">
+        <label for="end_data">{{.T "end_date"}}</label>
+        <input type="date" id="end_data" name="end_data" value="{{.Data.EndDate}}" required>
+      </div>
+
+      <button class="btn btn--primary" type="submit">{{.T "set_date_range"}}</button>
     </form>
   </aside>
 
@@ -62,7 +57,7 @@
       <!-- ID added for OOB updates -->
       <tbody id="calculator-tbody">
         <!-- We pass the .Rows slice directly into the rows template -->
-        {{template "calculator_rows" .Data.Rows}}
+        {{template "calculator_rows" .}}
       </tbody>
     </table>
 
@@ -75,22 +70,9 @@
 </div>
 {{end}}
 
-<!-- Reusable Single LI Fragment -->
-{{define "property_item"}}
-<li>
-  <span>{{.Data.Name}}</span>
-  <span class="property-date">{{.Data.ArrivalDate}}</span>
-  <button class="btn btn--icon" type="button" aria-label="{{.T "remove"}} {{.Data.Name}}" hx-delete="/orders/properties"
-    hx-include="#current-order-id" hx-vals='{"id": {{.Data.ID}}}' hx-target="closest li" hx-swap="delete">
-    &times;
-  </button>
-</li>
-{{end}}
-
-
 <!-- Reusable Table Rows Loop Fragment -->
 {{define "calculator_rows"}}
-{{range .}}
+{{range .Data.Rows}}
 <!-- Call the single row template and pass the current item (.) to it -->
 {{template "calculator_row" ($.Wrap .)}}
 {{else}}
@@ -104,7 +86,7 @@
 {{define "calculator_tbody_oob"}}
 <template>
   <tbody hx-swap-oob="innerHTML:#calculator-tbody">
-    {{template "calculator_rows" .Data}}
+    {{template "calculator_rows" .}}
   </tbody>
 </template>
 {{end}}

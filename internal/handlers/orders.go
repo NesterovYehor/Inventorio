@@ -17,15 +17,36 @@ func (h *Handler) HandelNewOrder(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+	items, err := h.db.GetAllItems(r.Context())
+	if err != nil {
+		http.Error(w, "Failed to get items", http.StatusInternalServerError)
+		log.Println(err)
+		return
 
+	}
+	order := models.EmptyOrderView(items, id)
+
+	h.render.Content(w, r, "draft_order", order)
+}
+
+func (h *Handler) handleSetDataRange(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.PathValue("id"))
+
+	start := r.FormValue("start_data")
+	end := r.FormValue("end_data")
+
+	if err := h.db.SetOrderRange(r.Context(), id, start, end); err != nil {
+		http.Error(w, "Failed to set date range for order", http.StatusInternalServerError)
+		log.Printf("Failed to set date range for order %v", err)
+		return
+	}
 	order, err := h.getOrderData(r.Context(), id)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Failed to get order data: %v", err), http.StatusInternalServerError)
 		log.Println(err)
-
+		return
 	}
-
-	h.render.Content(w, r, "draft_order", order)
+	h.render.Component(w, r, "calculator_update", order)
 }
 
 func (h *Handler) HandleOrdersList(w http.ResponseWriter, r *http.Request) {
@@ -59,24 +80,6 @@ func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) 
 	h.render.Component(w, r, "calculator_row", row)
 }
 
-func (h *Handler) HandleRemoveOrderProperty(w http.ResponseWriter, r *http.Request) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	orderID, _ := strconv.Atoi(r.FormValue("order_id"))
-
-	if err := h.db.DeleteOrderProperty(r.Context(), id); err != nil {
-		http.Error(w, "failed to delete propety from order", http.StatusInternalServerError)
-		log.Printf("failed to delete propety from order: %v", err)
-		return
-	}
-	rows, err := h.db.GetOrderRequirements(r.Context(), orderID)
-	if err != nil {
-		http.Error(w, "failed to get updated req rows", http.StatusInternalServerError)
-		log.Printf("failed to get updated req rows: %v", err)
-		return
-	}
-	h.render.Component(w, r, "calculator_tbody_oob", rows)
-}
-
 func (h *Handler) HandleCofirmOrder(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.PathValue("id"))
 	if err := h.db.UpdateOrderStatus(r.Context(), id); err != nil {
@@ -106,26 +109,21 @@ func (h *Handler) HandleOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 // This is a helper on the Handler, not the DB!
-func (h *Handler) getOrderData(ctx context.Context, orderID int) (models.OrderView, error) {
-	rows, err := h.db.GetOrderRequirements(ctx, orderID)
+func (h *Handler) getOrderData(ctx context.Context, id int) (models.OrderView, error) {
+	rows, err := h.db.GetOrderRequirements(ctx, id)
 	if err != nil {
 		return models.OrderView{}, fmt.Errorf("failed to get requirements: %w", err)
 	}
 
-	ps, err := h.db.GetAllProperties(ctx)
+	start, end, err := h.db.GetOrderRange(ctx, id)
 	if err != nil {
-		return models.OrderView{}, fmt.Errorf("failed to list properties: %w", err)
-	}
-
-	selectedProp, err := h.db.GetSelectedProperties(ctx, orderID)
-	if err != nil {
-		return models.OrderView{}, fmt.Errorf("failed to list selected properties: %w", err)
+		return models.OrderView{}, fmt.Errorf("failed to get date rangbe: %w", err)
 	}
 
 	return models.OrderView{
-		ID:                 orderID,
-		AllProperties:      ps,
-		SelectedProperties: selectedProp,
-		Rows:               rows,
+		ID:        id,
+		Rows:      rows,
+		StartDate: start,
+		EndDate:   end,
 	}, nil
 }

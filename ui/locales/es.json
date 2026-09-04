@@ -266,5 +266,21 @@
   {
     "id": "select_arrival_object",
     "translation": "Seleccionar objeto"
+  },
+  {
+    "id": "order_date_range",
+    "translation": "Rango de fechas del pedido"
+  },
+  {
+    "id": "start_date",
+    "translation": "Fecha de inicio"
+  },
+  {
+    "id": "end_date",
+    "translation": "Fecha de fin"
+  },
+  {
+    "id": "set_date_range",
+    "translation": "Establecer rango"
   }
 ]

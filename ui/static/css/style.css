@@ -423,6 +423,66 @@ body {
   font-weight: 600;
 }
 
+/* Date range form on the draft order page */
+.date-range-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.date-range-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-range-form__field label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a4f55;
+}
+
+.date-range-form__field input[type="date"] {
+  padding: 8px 12px;
+  border: 1px solid #e0e4e8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.95rem;
+}
+
+.date-range-form .btn {
+  margin-top: 4px;
+}
+
+/* Date range display on the confirmed order page */
+.date-range-display-section {
+  margin-bottom: 24px;
+}
+
+.date-range-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.date-range-display__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-range-display__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b727a;
+}
+
+.date-range-display__value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2328;
+}
+
 .calculator-table__empty td {
   background: #ffffff;
   color: #6b727a;

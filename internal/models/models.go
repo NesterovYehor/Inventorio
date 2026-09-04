@@ -67,18 +67,11 @@ type CalculatorRow struct {
 	OrderQty int // Much clearer than EndNumber
 }
 
-type OrderPropertyRow struct {
-	PropertyID  int
-	Name        string
-	ID          int
-	ArrivalDate string
-}
-
 type OrderView struct {
-	ID                 int
-	AllProperties      []Property
-	SelectedProperties []OrderPropertyRow
-	Rows               []CalculatorRow
+	ID        int
+	StartDate string
+	EndDate   string
+	Rows      []CalculatorRow
 }
 
 type ArrivalModal struct {
@@ -94,4 +87,22 @@ func DefaultPropertyRow(id int64, pn []PropertyNeed) *PropertyRow {
 		},
 		PropertyNeed: pn,
 	}
+}
+
+func EmptyOrderView(items []Item, id int) OrderView {
+	order := OrderView{
+		ID:   id,
+		Rows: []CalculatorRow{},
+	}
+	for _, i := range items {
+		row := CalculatorRow{
+			Item: ItemName{
+				ID:   i.ID,
+				Name: i.Name,
+			},
+			Have: i.Quantity,
+		}
+		order.Rows = append(order.Rows, row)
+	}
+	return order
 }

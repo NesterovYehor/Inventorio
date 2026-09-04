@@ -60,11 +60,10 @@ func (r *Renderer) InitUI() {
 	r.componentCache["property-row"] = rows
 	r.componentCache["calculator_row"] = rows
 
-	// Single parse loads all definitions: "calculator_update", "property_item", and "calculator_rows"
+	// Single parse loads all definitions: "calculator_update" and "calculator_rows"
 	calcTmpl := template.Must(template.ParseFS(templatesFS, "templates/draft_order.html"))
 
 	r.componentCache["calculator_update"] = calcTmpl
-	r.componentCache["property_item"] = calcTmpl
 	r.componentCache["calculator_rows"] = calcTmpl
 	r.componentCache["calculator_tbody_oob"] = template.Must(calcTmpl.ParseFS(templatesFS, "templates/partials/row.html"))
 

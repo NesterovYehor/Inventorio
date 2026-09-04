@@ -9,6 +9,20 @@
     <button class="btn btn--icon page-header__close" type="button" onclick="window.location.href='/orders'" aria-label="{{.T "close"}}">&times;</button>
   </header>
 
+  <section class="calculator__selected date-range-display-section">
+    <h2>{{.T "order_date_range"}}</h2>
+    <div class="date-range-display">
+      <div class="date-range-display__field">
+        <span class="date-range-display__label">{{.T "start_date"}}</span>
+        <span class="date-range-display__value">{{.Data.StartDate}}</span>
+      </div>
+      <div class="date-range-display__field">
+        <span class="date-range-display__label">{{.T "end_date"}}</span>
+        <span class="date-range-display__value">{{.Data.EndDate}}</span>
+      </div>
+    </div>
+  </section>
+
   <section class="calculator__table">
     <table class="needs-table calculator-table">
       <thead>

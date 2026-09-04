@@ -266,5 +266,21 @@
   {
     "id": "select_arrival_object",
     "translation": "Выбрать объект"
+  },
+  {
+    "id": "order_date_range",
+    "translation": "Диапазон дат заказа"
+  },
+  {
+    "id": "start_date",
+    "translation": "Дата начала"
+  },
+  {
+    "id": "end_date",
+    "translation": "Дата окончания"
+  },
+  {
+    "id": "set_date_range",
+    "translation": "Установить диапазон"
   }
 ]

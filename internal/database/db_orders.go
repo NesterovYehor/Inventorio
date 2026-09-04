@@ -3,16 +3,44 @@ package database
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/NesterovYehor/Inventorio/internal/models"
 )
 
+func (db *DB) SetOrderRange(ctx context.Context, id int, start, end string) error {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	query := `
+		UPDATE orders 
+		SET start_date = ?, end_date = ?
+		WHERE id = ?;
+	`
+
+	_, err := db.conn.ExecContext(ctx, query, start, end, id)
+	return err
+}
+
+func (db *DB) GetOrderRange(ctx context.Context, id int) (string, string, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT start_date, end_date FROM orders
+		WHERE id = ?;
+	`
+	var start string
+	var end string
+	err := db.conn.QueryRowContext(ctx, query, id).Scan(&start, &end)
+	return start, end, err
+}
+
 func (db *DB) GetOrderRequirements(ctx context.Context, orderID int) ([]models.CalculatorRow, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	// Short, clean query using subqueries
 	query := `
 		SELECT 
 			i.id,
@@ -20,8 +48,11 @@ func (db *DB) GetOrderRequirements(ctx context.Context, orderID int) ([]models.C
 			COALESCE((
 				SELECT SUM(pn.quantity) 
 				FROM property_needs pn
-				JOIN arrivals op ON op.property_id = pn.property_id
-				WHERE op.order_id = ? AND pn.item_id = i.id
+				JOIN arrivals a ON a.property_id = pn.property_id
+				JOIN orders o ON o.id = ? 
+				WHERE a.arrival_date BETWEEN o.start_date AND o.end_date
+				AND a.status != 'cancelled'
+				AND pn.item_id = i.id
 			), 0) AS need_qty,
 			COALESCE((
 				SELECT ol.extra_qty 
@@ -78,39 +109,10 @@ func (db *DB) CreateNewOrder(ctx context.Context) (int, error) {
 	return id, nil
 }
 
-func (db *DB) GetSelectedProperties(ctx context.Context, orderID int) ([]models.OrderPropertyRow, error) {
-	query := `
-	SELECT p.id, p.name, op.id, COALESCE(op.arrival_date, '') 
-		FROM properties p
-		INNER JOIN arrivals op ON p.id = op.property_id
-		WHERE op.order_id = ?;
-	`
-	rows, err := db.conn.QueryContext(ctx, query, orderID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var props []models.OrderPropertyRow
-	for rows.Next() {
-		var p models.OrderPropertyRow
-		if err := rows.Scan(&p.PropertyID, &p.Name, &p.ID, &p.ArrivalDate); err != nil {
-			return nil, err
-		}
-		props = append(props, p)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return props, nil
-}
-
 func (db *DB) UpdateOrderExtraValue(ctx context.Context, orderID, itemID, value int) error {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	// MUST BE AN INSERT ... ON CONFLICT (UPSERT)
 	query := `
 		INSERT INTO order_lines (order_id, item_id, extra_qty) 
 		VALUES (?, ?, ?)
@@ -170,20 +172,6 @@ func (db *DB) GetOrderItemRequirement(ctx context.Context, orderID, itemID int) 
 	}
 
 	return r, nil
-}
-
-func (db *DB) DeleteOrderProperty(ctx context.Context, id int) error {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
-	query := `
-	DELETE FROM arrivals
-		WHERE id = ?;
-	`
-	if _, err := db.conn.ExecContext(ctx, query, id); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (db *DB) GetAllOrders(ctx context.Context) ([]models.Order, error) {

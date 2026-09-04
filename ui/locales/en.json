@@ -266,5 +266,21 @@
   {
     "id": "select_arrival_object",
     "translation": "Select object"
+  },
+  {
+    "id": "order_date_range",
+    "translation": "Order Date Range"
+  },
+  {
+    "id": "start_date",
+    "translation": "Start Date"
+  },
+  {
+    "id": "end_date",
+    "translation": "End Date"
+  },
+  {
+    "id": "set_date_range",
+    "translation": "Set Date Range"
   }
 ]
