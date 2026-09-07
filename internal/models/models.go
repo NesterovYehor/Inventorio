@@ -13,6 +13,10 @@ type Item struct {
 	Quantity int // How many you currently have in the central warehouse
 }
 
+type ItemRequirements map[int]int
+
+type ItemExtras map[int]int
+
 // ItemName represents a name of a physical thing
 // in your central storage (e.g., "TOALLA grande") with out Quantity value
 type ItemName struct {
@@ -30,6 +34,8 @@ type PropertyNeed struct {
 type Order struct {
 	ID          int
 	IsDraft     bool
+	StartDate   string
+	EndDate     string
 	ConfirmDate string
 }
 

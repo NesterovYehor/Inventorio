@@ -72,6 +72,10 @@
     "translation": "Дата"
   },
   {
+    "id": "confirmation_date",
+    "translation": "Дата подтверждения"
+  },
+  {
     "id": "no_orders",
     "translation": "Пока нет заказов."
   },

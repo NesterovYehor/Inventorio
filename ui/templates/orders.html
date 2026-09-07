@@ -16,14 +16,15 @@
     <table class="needs-table">
       <thead>
         <tr>
-          <th scope="col">{{.T "order_id"}}</th>
-          <th scope="col">{{.T "date"}}</th>
+          <th scope="col">{{.T "order_date_range"}}</th>
+          <th scope="col">{{.T "confirmation_date"}}</th>
         </tr>
       </thead>
       <tbody>
         {{range .Data}}
-        <tr class="order-row {{if .IsDraft}}order-row--draft{{end}}" onclick="window.location.href='/orders/{{.ID}}?draft={{.IsDraft}}'">
-          <td>#{{.ID}}</td>
+        <tr class="order-row {{if .IsDraft}}order-row--draft{{end}}"
+          onclick="window.location.href='/orders/{{.ID}}?draft={{.IsDraft}}'">
+          <td>{{if or .StartDate .EndDate}}{{.StartDate}} — {{.EndDate}}{{else}}—{{end}}</td>
           <td>{{if .ConfirmDate}}{{.ConfirmDate}}{{else}}—{{end}}</td>
         </tr>
         {{else}}

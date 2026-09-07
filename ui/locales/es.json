@@ -72,6 +72,10 @@
     "translation": "Fecha"
   },
   {
+    "id": "confirmation_date",
+    "translation": "Fecha de confirmación"
+  },
+  {
     "id": "no_orders",
     "translation": "Aún no hay pedidos."
   },

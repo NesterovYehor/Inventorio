@@ -8,6 +8,39 @@ import (
 	"github.com/NesterovYehor/Inventorio/internal/models"
 )
 
+func (db *DB) GetItemByID(ctx context.Context, id int) (models.Item, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+
+	defer cancel()
+	var item models.Item
+
+	err := db.conn.QueryRowContext(ctx, `SELECT * FROM items ;`).Scan(&item.ID, &item.Name, &item.Quantity)
+	return item, err
+}
+
+func (db *DB) UpdateAllItems(ctx context.Context, rows []models.CalculatorRow) error {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	tx, err := db.conn.BeginTx(ctx, nil)
+	defer tx.Rollback()
+	if err != nil {
+		return fmt.Errorf("Failed to beguin transaction")
+	}
+	query := `
+	UPDATE items
+	SET quantity = ?
+	WHERE id = ?;
+	`
+
+	for _, row := range rows {
+		tx.ExecContext(ctx, query, row.OrderQty+row.Have, row.Item.ID)
+	}
+
+	return tx.Commit()
+
+}
+
 func (db *DB) CreateNewItem(ctx context.Context) (models.Item, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 
