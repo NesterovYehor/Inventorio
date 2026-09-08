@@ -18,7 +18,7 @@ func (db *DB) GetItemByID(ctx context.Context, id int) (models.Item, error) {
 	return item, err
 }
 
-func (db *DB) UpdateAllItems(ctx context.Context, rows []models.CalculatorRow) error {
+func (db *DB) UpdateAllItems(ctx context.Context, items []models.Item) error {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -27,14 +27,15 @@ func (db *DB) UpdateAllItems(ctx context.Context, rows []models.CalculatorRow) e
 	if err != nil {
 		return fmt.Errorf("Failed to beguin transaction")
 	}
+
 	query := `
 	UPDATE items
 	SET quantity = ?
 	WHERE id = ?;
 	`
 
-	for _, row := range rows {
-		tx.ExecContext(ctx, query, row.OrderQty+row.Have, row.Item.ID)
+	for _, item := range items {
+		tx.ExecContext(ctx, query, item.Quantity, item.ID)
 	}
 
 	return tx.Commit()

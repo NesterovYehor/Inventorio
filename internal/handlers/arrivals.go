@@ -61,6 +61,12 @@ func (h *Handler) handleUpdateArrivalStatus(w http.ResponseWriter, r *http.Reque
 		log.Printf("Failed to update arrival status: %v", err)
 		return
 	}
+
+	if err := h.db.ApplyArrivalNeeds(r.Context(), id, status != "confirm"); err != nil {
+		http.Error(w, "Failed to upply arriaval needs to items", http.StatusInternalServerError)
+		log.Printf("Failed to upply arriaval needs to items: %v", err)
+		return
+	}
 	arrival, err := h.db.GetArrivalByID(r.Context(), id)
 	if err != nil {
 		http.Error(w, "Failed to get arrival data", http.StatusInternalServerError)

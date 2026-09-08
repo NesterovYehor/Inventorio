@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/NesterovYehor/Inventorio/internal/models"
@@ -104,5 +105,25 @@ func (db *DB) DeleteArrivalByID(ctx context.Context, id int) error {
 		DELETE FROM arrivals WHERE id = ?;
 	`
 	_, err := db.conn.ExecContext(ctx, query, id)
+	return err
+}
+
+func (db *DB) ApplyArrivalNeeds(ctx context.Context, arrivalID int, deduct bool) error {
+	operator := "+"
+	if deduct {
+		operator = "-"
+	}
+
+	// while keeping the arrivalID parameterized for security.
+	query := fmt.Sprintf(`
+	UPDATE items 
+	SET quantity = items.quantity %s pn.quantity
+	FROM property_needs pn
+	JOIN arrivals a ON a.property_id = pn.property_id
+	WHERE items.id = pn.item_id 
+	AND a.id = ?;
+	`, operator)
+
+	_, err := db.conn.ExecContext(ctx, query, arrivalID)
 	return err
 }

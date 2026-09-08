@@ -82,31 +82,12 @@ func (h *Handler) HandleUpateExtraValue(w http.ResponseWriter, r *http.Request) 
 
 func (h *Handler) HandleCofirmOrder(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.PathValue("id"))
-	start, end, err := h.db.GetOrderRange(r.Context(), id)
-	if err != nil {
-		http.Error(w, "failed to get order date range", http.StatusInternalServerError)
-		log.Printf("failed to get order date range: %v", err)
-		return
-	}
-	order, err := h.getOrderData(r.Context(), id, start, end)
-	if err != nil {
-		http.Error(w, "failed to get order data", http.StatusInternalServerError)
-		log.Printf("failed to get order data: %v", err)
-		return
-	}
 
-	if err := h.db.UpdateAllItems(r.Context(), order.Rows); err != nil {
-		http.Error(w, "failed to update items", http.StatusInternalServerError)
-		log.Printf("failed to update items: %v", err)
-		return
-	}
-
-	if err := h.db.UpdateOrderStatus(r.Context(), id); err != nil {
+	if err := h.confirmAndProcessOrder(r.Context(), id); err != nil {
 		http.Error(w, "failed to confirm order", http.StatusInternalServerError)
 		log.Printf("failed to confirm order: %v", err)
 		return
 	}
-	log.Println(h.db.GetOrderRange(r.Context(), id))
 }
 
 func (h *Handler) HandleOrder(w http.ResponseWriter, r *http.Request) {
@@ -136,22 +117,35 @@ func (h *Handler) HandleOrder(w http.ResponseWriter, r *http.Request) {
 	h.render.Content(w, r, "confirmed_order", order)
 }
 
-// This is a helper on the Handler, not the DB!
-func (h *Handler) getOrderData(ctx context.Context, id int, start, end string) (models.OrderView, error) {
-
-	items, err := h.db.GetAllItems(ctx)
-	if err != nil {
-		return models.OrderView{}, fmt.Errorf("failed to get items list: %w", err)
-	}
-
+func (h *Handler) fetchRawOrderData(
+	ctx context.Context,
+	id int,
+	start, end string,
+) (
+	models.ItemExtras,
+	models.ItemRequirements,
+	error,
+) {
 	extras, err := h.db.GetOrderExtras(ctx, id)
 	if err != nil {
-		return models.OrderView{}, fmt.Errorf("failed to get extras values of items: %w", err)
+		return nil, nil, fmt.Errorf("failed to get extras values of items: %w", err)
 	}
 
 	needs, err := h.db.GetItemNeedsInDateRange(ctx, start, end)
 	if err != nil {
-		return models.OrderView{}, fmt.Errorf("failed to get needs values of order: %w", err)
+		return nil, nil, fmt.Errorf("failed to get needs values of order: %w", err)
+	}
+	return extras, needs, nil
+}
+
+func (h *Handler) getOrderData(ctx context.Context, id int, start, end string) (models.OrderView, error) {
+	items, err := h.db.GetAllItems(ctx)
+	if err != nil {
+		return models.OrderView{}, fmt.Errorf("failed to get items list: %w", err)
+	}
+	extras, needs, err := h.fetchRawOrderData(ctx, id, start, end)
+	if err != nil {
+		return models.OrderView{}, fmt.Errorf("failed to fetch order data: %w", err)
 	}
 
 	rows := []models.CalculatorRow{}
@@ -221,4 +215,35 @@ func (h *Handler) calculateItemRow(ctx context.Context, orderID, itemID int) (mo
 		Extra:    extra,
 		OrderQty: total,
 	}, nil
+}
+
+func (h *Handler) confirmAndProcessOrder(ctx context.Context, id int) error {
+	items, err := h.db.GetAllItems(ctx)
+	if err != nil {
+		return err
+	}
+
+	start, end, err := h.db.GetOrderRange(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	extras, needs, err := h.fetchRawOrderData(ctx, id, start, end)
+	if err != nil {
+		return err
+	}
+
+	for i, item := range items {
+		items[i].Quantity += max((needs[item.ID]+extras[item.ID])-item.Quantity, 0)
+	}
+
+	if err := h.db.UpdateAllItems(ctx, items); err != nil {
+		return err
+	}
+
+	if err := h.db.UpdateOrderStatus(ctx, id); err != nil {
+		return err
+	}
+
+	return nil
 }
